@@ -5,7 +5,6 @@
         "MixedReality.Toolkit.Core",
         "MixedReality.Toolkit.Data",
         "Microsoft.MixedReality.GraphicsTools",
-        "Unity.InputSystem",
         "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
