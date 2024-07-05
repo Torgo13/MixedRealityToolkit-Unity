@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor.UI;
 using UnityEngine.EventSystems;
-using UnityEngine.XR.Interaction.Toolkit.UI;
+//using UnityEngine.XR.Interaction.Toolkit.UI;
 using Microsoft.MixedReality.GraphicsTools;
 using TMPro;
 using System.Reflection;
@@ -180,7 +180,7 @@ namespace MixedReality.Toolkit.Editor
             SetReasonableCanvasDefaults(canvas);
 
             Undo.AddComponent<GraphicRaycaster>(gameObject);
-            Undo.AddComponent<TrackedDeviceGraphicRaycaster>(gameObject);
+            //Undo.AddComponent<TrackedDeviceGraphicRaycaster>(gameObject);
 
             Undo.CollapseUndoOperations(group);
         }

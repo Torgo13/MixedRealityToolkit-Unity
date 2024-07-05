@@ -15,10 +15,5 @@
   },
   "unity": "2021.3",
   "unityRelease": "26f1",
-  "documentationUrl": "https://www.mixedrealitytoolkit.org",
-  "dependencies": {
-    "com.unity.xr.interaction.toolkit": "2.3.0",
-    "com.unity.xr.management": "4.2.1",
-    "com.unity.xr.core-utils": "2.1.0"
-  }
+  "documentationUrl": "https://www.mixedrealitytoolkit.org"
 }

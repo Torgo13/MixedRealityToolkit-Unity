@@ -30,7 +30,7 @@ namespace MixedReality.Toolkit.UX
         /// </remarks>
         public override void OnDeselect(BaseEventData eventData)
         {
-            if (eventData == null || XRSubsystemHelpers.DisplaySubsystem == null)
+            if (eventData == null) //|| XRSubsystemHelpers.DisplaySubsystem == null)
             {
                 base.OnDeselect(eventData);
                 MRTKInputFieldManager.RemoveCurrentInputField(this);

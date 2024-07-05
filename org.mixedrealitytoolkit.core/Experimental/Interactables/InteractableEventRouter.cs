@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
+//using UnityEngine.XR.Interaction.Toolkit;
 
 
 namespace MixedReality.Toolkit.Experimental
@@ -24,8 +24,8 @@ namespace MixedReality.Toolkit.Experimental
     [AddComponentMenu("MRTK/Core/Interactable Event Router")]
     public class InteractableEventRouter : MonoBehaviour
     {
-        private readonly HashSet<IXRInteractable> activeInteractables = new HashSet<IXRInteractable>();
-        private readonly List<IXRInteractable> newInteractables = new List<IXRInteractable>();
+        //private readonly HashSet<IXRInteractable> activeInteractables = new HashSet<IXRInteractable>();
+        //private readonly List<IXRInteractable> newInteractables = new List<IXRInteractable>();
         private readonly List<InteractableEventRouterChildSource> childSources = new List<InteractableEventRouterChildSource>();
 
         [SerializeReference]
@@ -124,7 +124,7 @@ namespace MixedReality.Toolkit.Experimental
         /// </summary>
         private void ConnectAllEventRoutesToInteractables()
         {
-            GetComponentsInChildren(includeInactive: true, newInteractables);
+            /*GetComponentsInChildren(includeInactive: true, newInteractables);
             for (int i = 0; i < newInteractables.Count; i++)
             {
                 var interactable = newInteractables[i];
@@ -135,7 +135,7 @@ namespace MixedReality.Toolkit.Experimental
                         eventRoutes[j].Register(interactable);
                     }
                 }
-            }
+            }*/
         }
 
 
@@ -152,10 +152,10 @@ namespace MixedReality.Toolkit.Experimental
                 return;
             }
 
-            foreach (var activeInteractable in activeInteractables)
+            /*foreach (var activeInteractable in activeInteractables)
             {
                 eventRoute.Register(activeInteractable);
-            }
+            }*/
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace MixedReality.Toolkit.Experimental
         /// </summary>
         private void DisconnectAllEventRoutesFromKnownInteractables()
         {
-            if (eventRoutes != null)
+            /*if (eventRoutes != null)
             {
                 foreach (var interactable in activeInteractables)
                 {
@@ -174,7 +174,7 @@ namespace MixedReality.Toolkit.Experimental
 
                 }
             }
-            activeInteractables.Clear();
+            activeInteractables.Clear();*/
         }
 
         /// <summary>
@@ -190,21 +190,21 @@ namespace MixedReality.Toolkit.Experimental
                 return;
             }
 
-            foreach (var activeInteractable in activeInteractables)
+            /*foreach (var activeInteractable in activeInteractables)
             {
                 eventRoute.Unregister(activeInteractable);
-            }
+            }*/
         }
 
         /// <summary>
         /// Determine if the given child interactable is valid. This will filter out references to this object, and block
         /// interactables that are being managed by another <see cref="InteractableEventRouter"/>.
         /// </summary>
-        private bool IsValidChild(IXRInteractable interactable)
+        /*private bool IsValidChild(IXRInteractable interactable)
         {
             return interactable is MonoBehaviour behaviour &&
                 behaviour.gameObject != gameObject;
-        }
+        }*/
 
         /// <summary>
         /// Add the given event route type if not in the current set of routes.
@@ -313,7 +313,7 @@ namespace MixedReality.Toolkit.Experimental
         /// <param name="interactable">
         /// The interactable to register. Events will start being handled by this <see cref="IXRInteractableEventRoute"/>.
         /// </param>
-        void Register(IXRInteractable interactable);
+        //void Register(IXRInteractable interactable);
 
         /// <summary>
         /// Stop listening to events from a registered 
@@ -322,7 +322,7 @@ namespace MixedReality.Toolkit.Experimental
         /// <param name="interactable">
         /// The interactable to unregister. Events will no longer be handled by this <see cref="IXRInteractableEventRoute"/>.
         /// </param>
-        void Unregister(IXRInteractable interactable);
+        //void Unregister(IXRInteractable interactable);
     }
 
     /// <summary>
@@ -365,7 +365,7 @@ namespace MixedReality.Toolkit.Experimental
         /// The Unity <see href="https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit%401.0/api/UnityEngine.XR.Interaction.Toolkit.HoverEnterEventArgs.html">HoverEnterEventArgs</see>
         /// associated with the original interaction event.
         /// </param>
-        void OnChildHoverEntered(HoverEnterEventArgs args);
+        //void OnChildHoverEntered(HoverEnterEventArgs args);
 
         /// <summary>
         /// When a child game object's interactable receives a "hover exited" event, this function will be invoked.
@@ -374,7 +374,7 @@ namespace MixedReality.Toolkit.Experimental
         /// The Unity <see href="https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit%401.0/api/UnityEngine.XR.Interaction.Toolkit.HoverExitEventArgs.html">HoverExitEventArgs</see>
         /// associated with the original interaction event.
         /// </param>
-        void OnChildHoverExited(HoverExitEventArgs args);
+        //void OnChildHoverExited(HoverExitEventArgs args);
     }
 
     /// <summary>
@@ -398,7 +398,7 @@ namespace MixedReality.Toolkit.Experimental
         /// The Unity <see href="https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit%401.0/api/UnityEngine.XR.Interaction.Toolkit.HoverEnterEventArgs.html">HoverEnterEventArgs</see>
         /// associated with the original interaction event.
         /// </param>
-        void OnParentHoverEntered(HoverEnterEventArgs args);
+        //void OnParentHoverEntered(HoverEnterEventArgs args);
 
         /// <summary>
         /// When a parent game object's interactable receives a "hover exited" event, this function will be invoked.
@@ -407,7 +407,7 @@ namespace MixedReality.Toolkit.Experimental
         /// The Unity <see href="https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit%401.0/api/UnityEngine.XR.Interaction.Toolkit.HoverExitEventArgs.html">HoverExitEventArgs</see>
         /// associated with the original interaction event.
         /// </param>
-        void OnParentHoverExited(HoverExitEventArgs args);
+        //void OnParentHoverExited(HoverExitEventArgs args);
     }
 
     /// <summary>
@@ -431,7 +431,7 @@ namespace MixedReality.Toolkit.Experimental
         /// The Unity <see href="https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit%401.0/api/UnityEngine.XR.Interaction.Toolkit.SelectEnterEventArgs.html">SelectEnterEventArgs</see>
         /// associated with the original interaction event.
         /// </param>
-        void OnChildSelectEntered(SelectEnterEventArgs args);
+        //void OnChildSelectEntered(SelectEnterEventArgs args);
 
         /// <summary>
         /// When a child game object's interactable receives a "select exited" event, this function will be invoked.
@@ -440,7 +440,7 @@ namespace MixedReality.Toolkit.Experimental
         /// The Unity <see href="https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit%401.0/api/UnityEngine.XR.Interaction.Toolkit.SelectExitEventArgs.html">SelectExitEventArgs</see>
         /// associated with the original interaction event.
         /// </param>
-        void OnChildSelectExited(SelectExitEventArgs args);
+        //void OnChildSelectExited(SelectExitEventArgs args);
     }
 
     /// <summary>
@@ -464,7 +464,7 @@ namespace MixedReality.Toolkit.Experimental
         /// The Unity <see href="https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit%401.0/api/UnityEngine.XR.Interaction.Toolkit.SelectEnterEventArgs.html">SelectEnterEventArgs</see>
         /// associated with the original interaction event.
         /// </param>
-        void OnParentSelectEntered(SelectEnterEventArgs args);
+        //void OnParentSelectEntered(SelectEnterEventArgs args);
 
         /// <summary>
         /// When a parent game object's interactable receives a "select exited" event, this function will be invoked.
@@ -473,7 +473,7 @@ namespace MixedReality.Toolkit.Experimental
         /// The Unity <see href="https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit%401.0/api/UnityEngine.XR.Interaction.Toolkit.SelectExitEventArgs.html">SelectExitEventArgs</see>
         /// associated with the original interaction event.
         /// </param>
-        void OnParentSelectExited(SelectExitEventArgs args);
+        //void OnParentSelectExited(SelectExitEventArgs args);
     }
 
     /// <summary>
@@ -497,7 +497,7 @@ namespace MixedReality.Toolkit.Experimental
     /// value out of them early enough so to provide feedback. 
     /// </remarks>
     public abstract class InteractableEventRoute<S, T> : IXRInteractableEventRoute
-        where S : IXRInteractable
+        //where S : IXRInteractable
         where T : IXRInteractableEventRouteTarget
     {
         private List<T> targets = null;
@@ -519,7 +519,7 @@ namespace MixedReality.Toolkit.Experimental
         }
 
         /// <inheritdoc/>
-        public void Register(IXRInteractable interactable)
+        /*public void Register(IXRInteractable interactable)
         {
             if (targets == null)
             {
@@ -537,10 +537,10 @@ namespace MixedReality.Toolkit.Experimental
                     }
                 }
             }
-        }
+        }*/
 
         /// <inheritdoc/>
-        public void Unregister(IXRInteractable interactable)
+        /*public void Unregister(IXRInteractable interactable)
         {
             if (targets == null)
             {
@@ -557,7 +557,7 @@ namespace MixedReality.Toolkit.Experimental
                     }
                 }
             }
-        }
+        }*/
 
         /// <summary>
         /// FIlter targets that are being targeted by other <see cref="InteractableEventRouter"/> objects.
@@ -631,7 +631,7 @@ namespace MixedReality.Toolkit.Experimental
     /// value out of them early enough so to provide feedback. 
     /// </remarks>
     public abstract class InteractableParentEventRoute<S, T> : InteractableEventRoute<S, T>
-        where S : IXRInteractable
+        //where S : IXRInteractable
         where T : IXRInteractableEventRouteTarget
     {
         /// <summary>
@@ -669,7 +669,7 @@ namespace MixedReality.Toolkit.Experimental
     /// value out of them early enough so to provide feedback. 
     /// </remarks>
     public abstract class InteractableChildrenEventRoute<S, T> : InteractableEventRoute<S, T>
-        where S : IXRInteractable
+        //where S : IXRInteractable
         where T : IXRInteractableEventRouteTarget
     {
         /// <summary>
@@ -699,7 +699,7 @@ namespace MixedReality.Toolkit.Experimental
     /// For these types of features, we want the community to see them and get 
     /// value out of them early enough so to provide feedback. 
     /// </remarks>
-    public sealed class BubbleChildHoverEvents : InteractableParentEventRoute<IXRHoverInteractable, IXRHoverInteractableParent>
+    /*public sealed class BubbleChildHoverEvents : InteractableParentEventRoute<IXRHoverInteractable, IXRHoverInteractableParent>
     {
         /// <inheritdoc/>
         protected override void Register(IXRHoverInteractable source, IXRHoverInteractableParent target)
@@ -714,7 +714,7 @@ namespace MixedReality.Toolkit.Experimental
             source.hoverEntered.RemoveListener(target.OnChildHoverEntered);
             source.hoverExited.RemoveListener(target.OnChildHoverExited);
         }
-    }
+    }*/
 
     /// <summary>
     /// A <see cref="InteractableParentEventRoute{S, T}"/> that retransmits hover events from
@@ -728,7 +728,7 @@ namespace MixedReality.Toolkit.Experimental
     /// For these types of features, we want the community to see them and get 
     /// value out of them early enough so to provide feedback. 
     /// </remarks>
-    public sealed class TrickleChildHoverEvents : InteractableChildrenEventRoute<IXRHoverInteractable, IXRHoverInteractableChild>
+    /*public sealed class TrickleChildHoverEvents : InteractableChildrenEventRoute<IXRHoverInteractable, IXRHoverInteractableChild>
     {
         /// <inheritdoc/>
         protected override void Register(IXRHoverInteractable source, IXRHoverInteractableChild target)
@@ -743,7 +743,7 @@ namespace MixedReality.Toolkit.Experimental
             source.hoverEntered.RemoveListener(target.OnParentHoverEntered);
             source.hoverExited.RemoveListener(target.OnParentHoverExited);
         }
-    }
+    }*/
 
     /// <summary>
     /// A <see cref="InteractableParentEventRoute{S, T}"/> that retransmits select events from
@@ -757,7 +757,7 @@ namespace MixedReality.Toolkit.Experimental
     /// For these types of features, we want the community to see them and get 
     /// value out of them early enough so to provide feedback. 
     /// </remarks>
-    public sealed class BubbleChildSelectEvents : InteractableParentEventRoute<IXRSelectInteractable, IXRSelectInteractableParent>
+    /*public sealed class BubbleChildSelectEvents : InteractableParentEventRoute<IXRSelectInteractable, IXRSelectInteractableParent>
     {
         /// <inheritdoc/>
         protected override void Register(IXRSelectInteractable source, IXRSelectInteractableParent target)
@@ -772,7 +772,7 @@ namespace MixedReality.Toolkit.Experimental
             source.selectEntered.RemoveListener(target.OnChildSelectEntered);
             source.selectExited.RemoveListener(target.OnChildSelectExited);
         }
-    }
+    }*/
 
     /// <summary>
     /// A <see cref="InteractableParentEventRoute{S, T}"/> that retransmits select events from
@@ -786,7 +786,7 @@ namespace MixedReality.Toolkit.Experimental
     /// For these types of features, we want the community to see them and get 
     /// value out of them early enough so to provide feedback. 
     /// </remarks>
-    public sealed class TrickleChildSelectEvents : InteractableChildrenEventRoute<IXRSelectInteractable, IXRSelectInteractableChild>
+    /*public sealed class TrickleChildSelectEvents : InteractableChildrenEventRoute<IXRSelectInteractable, IXRSelectInteractableChild>
     {
         /// <inheritdoc/>
         protected override void Register(IXRSelectInteractable source, IXRSelectInteractableChild target)
@@ -801,5 +801,5 @@ namespace MixedReality.Toolkit.Experimental
             source.selectEntered.RemoveListener(target.OnParentSelectEntered);
             source.selectExited.RemoveListener(target.OnParentSelectExited);
         }
-    }
+    }*/
 }
