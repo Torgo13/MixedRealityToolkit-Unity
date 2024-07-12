@@ -50,12 +50,15 @@ namespace MixedReality.Toolkit
         public static void ApplyToHierarchy(this GameObject root, Action<GameObject> action)
         {
             action(root);
-            Transform[] items = root.GetComponentsInChildren<Transform>();
-            int count = items.Length;
-
-            for (var i = 0; i < count; i++)
+            using (UnityEngine.Pool.ListPool<Transform>.Get(out var items))
             {
-                action(items[i].gameObject);
+                root.GetComponentsInChildren<Transform>(items);
+                int count = items.Count;
+
+                for (var i = 0; i < count; i++)
+                {
+                    action(items[i].gameObject);
+                }
             }
         }
 
@@ -79,12 +82,15 @@ namespace MixedReality.Toolkit
         /// <param name="action">Action to perform.</param>
         public static void ForEachComponent<T>(this GameObject gameObject, Action<T> action) where T : Component
         {
-            T[] components = gameObject.GetComponents<T>();
-            int count = components.Length;
-
-            for (int i = 0; i < count; i++)
+            using (UnityEngine.Pool.ListPool<T>.Get(out var components))
             {
-                action(components[i]);
+                gameObject.GetComponents<T>(components);
+                int count = components.Count;
+
+                for (int i = 0; i < count; i++)
+                {
+                    action(components[i]);
+                }
             }
         }
 
@@ -102,29 +108,32 @@ namespace MixedReality.Toolkit
             requiringTypes = null;
 
 #if UNITY_EDITOR
-            MonoBehaviour[] monoBehaviours = gameObject.GetComponents<MonoBehaviour>();
-            int count = monoBehaviours.Length;
-
-            for (int i = 0; i < count; i++)
+            using (UnityEngine.Pool.ListPool<MonoBehaviour>.Get(out var monoBehaviours))
             {
-                if (monoBehaviours[i] == null)
-                {
-                    continue;
-                }
+                gameObject.GetComponents<MonoBehaviour>(monoBehaviours);
+                int count = monoBehaviours.Count;
 
-                var monoBehaviourType = monoBehaviours[i].GetType();
-                var attributes = Attribute.GetCustomAttributes(monoBehaviourType);
-
-                foreach (var attribute in attributes)
+                for (int i = 0; i < count; i++)
                 {
-                    if (attribute is RequireComponent requireComponentAttribute)
+                    if (monoBehaviours[i] == null)
                     {
-                        if (requireComponentAttribute.m_Type0 == genericType ||
-                            requireComponentAttribute.m_Type1 == genericType ||
-                            requireComponentAttribute.m_Type2 == genericType)
+                        continue;
+                    }
+
+                    var monoBehaviourType = monoBehaviours[i].GetType();
+                    var attributes = Attribute.GetCustomAttributes(monoBehaviourType);
+
+                    foreach (var attribute in attributes)
+                    {
+                        if (attribute is RequireComponent requireComponentAttribute)
                         {
-                            requiringTypes ??= new List<Type>();
-                            requiringTypes.Add(monoBehaviourType);
+                            if (requireComponentAttribute.m_Type0 == genericType ||
+                                requireComponentAttribute.m_Type1 == genericType ||
+                                requireComponentAttribute.m_Type2 == genericType)
+                            {
+                                requiringTypes ??= new List<Type>();
+                                requiringTypes.Add(monoBehaviourType);
+                            }
                         }
                     }
                 }

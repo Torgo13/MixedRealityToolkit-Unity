@@ -646,12 +646,15 @@ namespace MixedReality.Toolkit.Data
 
         protected void FindComponentsOnGameObject(GameObject gameObject, Type componentType)
         {
-            Component[] componentsToScanForVariables = gameObject.GetComponents(componentType) as Component[];
-            foreach (Component component in componentsToScanForVariables)
+            using (UnityEngine.Pool.ListPool<Component>.Get(out var componentsToScanForVariables))
             {
-                if (ComponentMeetsAllQualifications(component))
+                gameObject.GetComponents(componentType, componentsToScanForVariables);
+                foreach (Component component in componentsToScanForVariables)
                 {
-                    _componentsToManage.Add(component);
+                    if (ComponentMeetsAllQualifications(component))
+                    {
+                        _componentsToManage.Add(component);
+                    }
                 }
             }
         }
@@ -666,8 +669,7 @@ namespace MixedReality.Toolkit.Data
                 {
                     GameObject childGameObject = childTransform.gameObject;
                     // Only check deeper on this branch if this type of DataConsumer is not already found on this game object.
-                    Component thisDataConsumerType = childGameObject.GetComponent(GetType());
-                    if (thisDataConsumerType == null)
+                    if (!childGameObject.TryGetComponent(GetType(), out var _))
                     {
                         FindUnmanagedComponentsInChildren(childGameObject, componentTypeToManage);
                     }
@@ -736,13 +738,16 @@ namespace MixedReality.Toolkit.Data
             // walk from current GameObject up to root GameObject looking for an IDataSourceProvider
             while (currentGO != null)
             {
-                Component[] dataSourceComponents = currentGO.GetComponents(typeof(IDataSourceProvider));
-                foreach (Component dataSourceComponent in dataSourceComponents)
+                using (UnityEngine.Pool.ListPool<IDataSourceProvider>.Get(out var dataSourceComponents))
                 {
-                    if ((dataSourceComponent as MonoBehaviour).enabled)
+                    currentGO.GetComponents<IDataSourceProvider>(dataSourceComponents);
+                    foreach (var dataSourceComponent in dataSourceComponents)
                     {
-                        IDataSourceProvider dataSourceProvider = dataSourceComponent as IDataSourceProvider;
-                        AddDataSourcesFromProvider(dataSourceProvider, dataSourceTypes, dataSourcesInOut);
+                        if ((dataSourceComponent as MonoBehaviour).enabled)
+                        {
+                            IDataSourceProvider dataSourceProvider = dataSourceComponent;
+                            AddDataSourcesFromProvider(dataSourceProvider, dataSourceTypes, dataSourcesInOut);
+                        }
                     }
                 }
 
@@ -803,15 +808,19 @@ namespace MixedReality.Toolkit.Data
 
                 while (currentGO != null && defaultDataController == null)
                 {
-                    Component[] dataControllerComponents = currentGO.GetComponents(typeof(IDataController));
-                    foreach (Component dataControllerComponent in dataControllerComponents)
+                    using (UnityEngine.Pool.ListPool<IDataController>.Get(out var dataControllerComponents))
                     {
-                        if ((dataControllerComponent as MonoBehaviour).enabled)
+                        currentGO.GetComponents<IDataController>(dataControllerComponents);
+                        foreach (var dataControllerComponent in dataControllerComponents)
                         {
-                            defaultDataController = dataControllerComponent as IDataController;
-                            break;
+                            if ((dataControllerComponent as MonoBehaviour).enabled)
+                            {
+                                defaultDataController = dataControllerComponent;
+                                break;
+                            }
                         }
                     }
+
                     if (currentGO.transform.parent != null)
                     {
                         currentGO = currentGO.transform.parent.gameObject;

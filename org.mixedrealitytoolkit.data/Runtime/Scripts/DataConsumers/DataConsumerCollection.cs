@@ -548,14 +548,17 @@ namespace MixedReality.Toolkit.Data
 
             InitializePrefabInstance(-1, itemGO);
 
-            Component[] dataConsumers = itemGO.GetComponentsInChildren(typeof(DataConsumerGOBase));
-
-            foreach (Component component in dataConsumers)
+            using (UnityEngine.Pool.ListPool<DataConsumerGOBase>.Get(out var dataConsumers))
             {
-                DataConsumerGOBase dataConsumer = component as DataConsumerGOBase;
+                itemGO.GetComponentsInChildren<DataConsumerGOBase>(dataConsumers);
 
-                if (dataConsumer.IsAttached())
-                    dataConsumer.Detach();
+                foreach (Component component in dataConsumers)
+                {
+                    DataConsumerGOBase dataConsumer = component as DataConsumerGOBase;
+
+                    if (dataConsumer.IsAttached())
+                        dataConsumer.Detach();
+                }
             }
 
             if (disable)
@@ -604,16 +607,18 @@ namespace MixedReality.Toolkit.Data
         /// <param name="collectionItemKeyPathPrefix">The Keypath prefix associated with this collection.</param>
         protected void UpdatePrefabDataConsumers(GameObject prefab, string collectionItemKeyPathPrefix)
         {
-            Component[] dataConsumers = prefab.GetComponentsInChildren(typeof(DataConsumerGOBase));
-
-            // DataConsumerGOBase[] dataConsumers = prefab.GetComponentsInChildren(typeof(DataConsumerGOBase)) as DataConsumerGOBase[];
-            foreach (Component component in dataConsumers)
+            using (UnityEngine.Pool.ListPool<DataConsumerGOBase>.Get(out var dataConsumers))
             {
-                DataConsumerGOBase dataConsumer = component as DataConsumerGOBase;
+                prefab.GetComponentsInChildren<DataConsumerGOBase>(dataConsumers);
 
-                dataConsumer.Attach(DataSources, DataController, collectionItemKeyPathPrefix);
+                foreach (Component component in dataConsumers)
+                {
+                    if (component is DataConsumerGOBase dataConsumer)
+                    {
+                        dataConsumer.Attach(DataSources, DataController, collectionItemKeyPathPrefix);
+                    }
+                }
             }
-
         }
 
         /// <inheritdoc/>

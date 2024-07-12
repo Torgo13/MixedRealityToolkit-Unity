@@ -619,10 +619,13 @@ namespace MixedReality.Toolkit
         /// <param name="relativeTo">Compute bounds relative to this transform.</param>
         public static void GetColliderBoundsPoints(GameObject target, List<Vector3> boundsPoints, LayerMask ignoreLayers, Transform relativeTo = null)
         {
-            Collider[] colliders = target.GetComponentsInChildren<Collider>();
-            for (int i = 0; i < colliders.Length; i++)
+            using (UnityEngine.Pool.ListPool<Collider>.Get(out var colliders))
             {
-                GetColliderBoundsPoints(colliders[i], boundsPoints, ignoreLayers, relativeTo);
+                target.GetComponentsInChildren<Collider>(colliders);
+                for (int i = 0, collidersCount = colliders.Count; i < collidersCount; i++)
+                {
+                    GetColliderBoundsPoints(colliders[i], boundsPoints, ignoreLayers, relativeTo);
+                }
             }
         }
 
@@ -723,17 +726,20 @@ namespace MixedReality.Toolkit
         /// <param name="ignoreLayers">A layer mask used to simplify search.</param>
         public static void GetRenderBoundsPoints(GameObject target, List<Vector3> boundsPoints, LayerMask ignoreLayers)
         {
-            Renderer[] renderers = target.GetComponentsInChildren<Renderer>();
-            for (int i = 0; i < renderers.Length; ++i)
+            using (UnityEngine.Pool.ListPool<Renderer>.Get(out var renderers))
             {
-                Renderer rendererObj = renderers[i];
-                if (ignoreLayers == (1 << rendererObj.gameObject.layer | ignoreLayers))
+                target.GetComponentsInChildren<Renderer>(renderers);
+                for (int i = 0, renderersCount = renderers.Count; i < renderersCount; ++i)
                 {
-                    continue;
-                }
+                    Renderer rendererObj = renderers[i];
+                    if (ignoreLayers == (1 << rendererObj.gameObject.layer | ignoreLayers))
+                    {
+                        continue;
+                    }
 
-                rendererObj.bounds.GetCornerPositionsFromRendererBounds(ref corners);
-                boundsPoints.AddRange(corners);
+                    rendererObj.bounds.GetCornerPositionsFromRendererBounds(ref corners);
+                    boundsPoints.AddRange(corners);
+                }
             }
         }
 
@@ -763,24 +769,31 @@ namespace MixedReality.Toolkit
         /// <param name="ignoreLayers">A layer mask to simplify search.</param>
         public static void GetMeshFilterBoundsPoints(GameObject target, List<Vector3> boundsPoints, LayerMask ignoreLayers)
         {
-            MeshFilter[] meshFilters = target.GetComponentsInChildren<MeshFilter>();
-            for (int i = 0; i < meshFilters.Length; i++)
+            using (UnityEngine.Pool.ListPool<MeshFilter>.Get(out var meshFilters))
             {
-                MeshFilter meshFilterObj = meshFilters[i];
-                if (ignoreLayers == (1 << meshFilterObj.gameObject.layer | ignoreLayers))
+                target.GetComponentsInChildren<MeshFilter>(meshFilters);
+                for (int i = 0, meshFiltersCount = meshFilters.Count; i < meshFiltersCount; i++)
                 {
-                    continue;
-                }
+                    MeshFilter meshFilterObj = meshFilters[i];
+                    if (ignoreLayers == (1 << meshFilterObj.gameObject.layer | ignoreLayers))
+                    {
+                        continue;
+                    }
 
-                Bounds meshBounds = meshFilterObj.sharedMesh.bounds;
-                meshBounds.GetCornerPositions(meshFilterObj.transform, ref corners);
-                boundsPoints.AddRange(corners);
+                    Bounds meshBounds = meshFilterObj.sharedMesh.bounds;
+                    meshBounds.GetCornerPositions(meshFilterObj.transform, ref corners);
+                    boundsPoints.AddRange(corners);
+                }
             }
-            RectTransform[] rectTransforms = target.GetComponentsInChildren<RectTransform>();
-            for (int i = 0; i < rectTransforms.Length; i++)
+
+            using (UnityEngine.Pool.ListPool<RectTransform>.Get(out var rectTransforms))
             {
-                rectTransforms[i].GetWorldCorners(rectTransformCorners);
-                boundsPoints.AddRange(rectTransformCorners);
+                target.GetComponentsInChildren<RectTransform>(rectTransforms);
+                for (int i = 0, rectTransformsCount = rectTransforms.Count; i < rectTransformsCount; i++)
+                {
+                    rectTransforms[i].GetWorldCorners(rectTransformCorners);
+                    boundsPoints.AddRange(rectTransformCorners);
+                }
             }
         }
 
@@ -850,15 +863,15 @@ namespace MixedReality.Toolkit
             // Return the screen space point array
             return new Vector2[]
             {
-            camera.WorldToScreenPoint(new Vector3(aabbCenter.x - aabbExtents.x, aabbCenter.y - aabbExtents.y, aabbCenter.z - aabbExtents.z)),
-            camera.WorldToScreenPoint(new Vector3(aabbCenter.x + aabbExtents.x, aabbCenter.y - aabbExtents.y, aabbCenter.z - aabbExtents.z)),
-            camera.WorldToScreenPoint(new Vector3(aabbCenter.x + aabbExtents.x, aabbCenter.y + aabbExtents.y, aabbCenter.z - aabbExtents.z)),
-            camera.WorldToScreenPoint(new Vector3(aabbCenter.x - aabbExtents.x, aabbCenter.y + aabbExtents.y, aabbCenter.z - aabbExtents.z)),
+                camera.WorldToScreenPoint(new Vector3(aabbCenter.x - aabbExtents.x, aabbCenter.y - aabbExtents.y, aabbCenter.z - aabbExtents.z)),
+                camera.WorldToScreenPoint(new Vector3(aabbCenter.x + aabbExtents.x, aabbCenter.y - aabbExtents.y, aabbCenter.z - aabbExtents.z)),
+                camera.WorldToScreenPoint(new Vector3(aabbCenter.x + aabbExtents.x, aabbCenter.y + aabbExtents.y, aabbCenter.z - aabbExtents.z)),
+                camera.WorldToScreenPoint(new Vector3(aabbCenter.x - aabbExtents.x, aabbCenter.y + aabbExtents.y, aabbCenter.z - aabbExtents.z)),
 
-            camera.WorldToScreenPoint(new Vector3(aabbCenter.x - aabbExtents.x, aabbCenter.y - aabbExtents.y, aabbCenter.z + aabbExtents.z)),
-            camera.WorldToScreenPoint(new Vector3(aabbCenter.x + aabbExtents.x, aabbCenter.y - aabbExtents.y, aabbCenter.z + aabbExtents.z)),
-            camera.WorldToScreenPoint(new Vector3(aabbCenter.x + aabbExtents.x, aabbCenter.y + aabbExtents.y, aabbCenter.z + aabbExtents.z)),
-            camera.WorldToScreenPoint(new Vector3(aabbCenter.x - aabbExtents.x, aabbCenter.y + aabbExtents.y, aabbCenter.z + aabbExtents.z))
+                camera.WorldToScreenPoint(new Vector3(aabbCenter.x - aabbExtents.x, aabbCenter.y - aabbExtents.y, aabbCenter.z + aabbExtents.z)),
+                camera.WorldToScreenPoint(new Vector3(aabbCenter.x + aabbExtents.x, aabbCenter.y - aabbExtents.y, aabbCenter.z + aabbExtents.z)),
+                camera.WorldToScreenPoint(new Vector3(aabbCenter.x + aabbExtents.x, aabbCenter.y + aabbExtents.y, aabbCenter.z + aabbExtents.z)),
+                camera.WorldToScreenPoint(new Vector3(aabbCenter.x - aabbExtents.x, aabbCenter.y + aabbExtents.y, aabbCenter.z + aabbExtents.z))
             };
         }
 
