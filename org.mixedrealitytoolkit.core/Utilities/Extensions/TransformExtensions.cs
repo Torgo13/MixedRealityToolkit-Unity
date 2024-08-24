@@ -137,6 +137,7 @@ namespace MixedReality.Toolkit
             foreach (Transform transform in startTransform.EnumerateAncestors(includeSelf))
             {
                 if (transform.TryGetComponent<T>(out var component))
+                if (transform.TryGetComponent(out T component))
                 {
                     return component;
                 }
