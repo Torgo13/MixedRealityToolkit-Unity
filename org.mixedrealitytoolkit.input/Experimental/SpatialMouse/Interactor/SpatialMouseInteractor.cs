@@ -1,6 +1,8 @@
 // Copyright (c) Mixed Reality Toolkit Contributors
 // Licensed under the BSD 3-Clause
 
+#if ENABLE_VR && ENABLE_XR_MODULE
+
 using MixedReality.Toolkit.Subsystems;
 using System.Collections.Generic;
 using Unity.Profiling;
@@ -220,3 +222,5 @@ namespace MixedReality.Toolkit.Input.Experimental
         #endregion
     }
 }
+
+#endif // ENABLE_VR && ENABLE_XR_MODULE

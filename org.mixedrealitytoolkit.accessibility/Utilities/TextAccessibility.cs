@@ -1,6 +1,8 @@
 // Copyright (c) Mixed Reality Toolkit Contributors
 // Licensed under the BSD 3-Clause
 
+#if ENABLE_VR && ENABLE_XR_MODULE
+
 using TMPro;
 using UnityEngine;
 
@@ -119,3 +121,5 @@ namespace MixedReality.Toolkit.Accessibility
         #endregion MonoBehaviour
     }
 }
+
+#endif // ENABLE_VR && ENABLE_XR_MODULE

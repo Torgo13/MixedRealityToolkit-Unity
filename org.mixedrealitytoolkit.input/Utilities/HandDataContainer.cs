@@ -1,6 +1,8 @@
 // Copyright (c) Mixed Reality Toolkit Contributors
 // Licensed under the BSD 3-Clause
 
+#if ENABLE_VR && ENABLE_XR_MODULE
+
 using System.Collections.Generic;
 using UnityEngine.XR;
 
@@ -66,3 +68,5 @@ namespace MixedReality.Toolkit.Input
         public abstract bool TryGetJoint(TrackedHandJoint joint, out HandJointPose pose);
     }
 }
+
+#endif // ENABLE_VR && ENABLE_XR_MODULE

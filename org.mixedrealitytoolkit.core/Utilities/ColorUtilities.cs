@@ -88,7 +88,7 @@ namespace MixedReality.Toolkit
 #else
         // Caching the key times to not create a new HashSet every time this is called.
         private static HashSet<float> cachedKeyTimes = new HashSet<float>();
-#endif
+#endif // OPTIMISATION_LISTPOOL
 
         private static Gradient GradientLerp(Gradient a, Gradient b, float t, bool noAlpha, bool noColor)
         {
@@ -108,7 +108,7 @@ namespace MixedReality.Toolkit
 #else
                 // List of all the unique key times
                 cachedKeyTimes.Clear();
-#endif
+#endif // OPTIMISATION_LISTPOOL
 
                 if (!noColor)
                 {
@@ -164,7 +164,7 @@ namespace MixedReality.Toolkit
 
 #if OPTIMISATION_LISTPOOL
             }
-#endif
+#endif // OPTIMISATION_LISTPOOL
         }
     }
 }

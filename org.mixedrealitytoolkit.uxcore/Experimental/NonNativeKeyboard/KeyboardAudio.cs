@@ -25,14 +25,20 @@ namespace MixedReality.Toolkit.UX
         private void EnableTouch()
         {
             clickSoundPlayer = gameObject.GetComponent<AudioSource>();
+#if OPTIMISATION_LISTPOOL
             using (UnityEngine.Pool.ListPool<Button>.Get(out var buttons))
             {
                 GetComponentsInChildren<Button>(true, buttons);
+#else
+                var buttons = GetComponentsInChildren<Button>(true);
+#endif // OPTIMISATION_LISTPOOL
                 foreach (var button in buttons)
                 {
                     button.onClick.AddListener(PlayClick);
                 }
+#if OPTIMISATION_LISTPOOL
             }
+#endif // OPTIMISATION_LISTPOOL
         }
 
         private void PlayClick()

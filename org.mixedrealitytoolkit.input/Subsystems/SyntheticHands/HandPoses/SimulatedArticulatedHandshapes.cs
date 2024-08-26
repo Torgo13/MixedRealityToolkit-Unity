@@ -61,10 +61,12 @@ namespace MixedReality.Toolkit.Input
         {
             HandshapeJointPoseData = new Dictionary<HandshapeId, HandJointPose[]>();
 
+#if ENABLE_VR && ENABLE_XR_MODULE
             foreach (var mapping in HandshapeJointPoseDataJSONMapping)
             {
                 HandshapeJointPoseData.Add(mapping.Key, HandsUtils.PoseFromJson(mapping.Value));
             }
+#endif // ENABLE_VR && ENABLE_XR_MODULE
         }
 
         #region ArticulatedHandPose_Flat JSON

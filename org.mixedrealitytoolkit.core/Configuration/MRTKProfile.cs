@@ -1,7 +1,7 @@
 // Copyright (c) Mixed Reality Toolkit Contributors
 // Licensed under the BSD 3-Clause
 
-//using MixedReality.Toolkit.Subsystems;
+using MixedReality.Toolkit.Subsystems;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -31,7 +31,7 @@ namespace MixedReality.Toolkit
 
         [SerializeField]
         [Tooltip("The list of subsystems intended to be started at runtime.")]
-        //[Implements(typeof(IMRTKManagedSubsystem), TypeGrouping.ByNamespaceFlat)]
+        [Implements(typeof(IMRTKManagedSubsystem), TypeGrouping.ByNamespaceFlat)]
         private List<SystemType> loadedSubsystems = new List<SystemType>();
 
         /// <summary>

@@ -547,11 +547,14 @@ namespace MixedReality.Toolkit.Data
             }
 
             InitializePrefabInstance(-1, itemGO);
-
+            
+#if OPTIMISATION_LISTPOOL
             using (UnityEngine.Pool.ListPool<DataConsumerGOBase>.Get(out var dataConsumers))
             {
                 itemGO.GetComponentsInChildren<DataConsumerGOBase>(dataConsumers);
-
+#else
+                Component[] dataConsumers = itemGO.GetComponentsInChildren(typeof(DataConsumerGOBase));
+#endif // OPTIMISATION_LISTPOOL
                 foreach (Component component in dataConsumers)
                 {
                     DataConsumerGOBase dataConsumer = component as DataConsumerGOBase;
@@ -559,7 +562,9 @@ namespace MixedReality.Toolkit.Data
                     if (dataConsumer.IsAttached())
                         dataConsumer.Detach();
                 }
+#if OPTIMISATION_LISTPOOL
             }
+#endif // OPTIMISATION_LISTPOOL
 
             if (disable)
             {
@@ -607,18 +612,23 @@ namespace MixedReality.Toolkit.Data
         /// <param name="collectionItemKeyPathPrefix">The Keypath prefix associated with this collection.</param>
         protected void UpdatePrefabDataConsumers(GameObject prefab, string collectionItemKeyPathPrefix)
         {
+#if OPTIMISATION_LISTPOOL
             using (UnityEngine.Pool.ListPool<DataConsumerGOBase>.Get(out var dataConsumers))
             {
                 prefab.GetComponentsInChildren<DataConsumerGOBase>(dataConsumers);
-
+#else
+                Component[] dataConsumers = prefab.GetComponentsInChildren(typeof(DataConsumerGOBase));
+#endif // OPTIMISATION_LISTPOOL
+                // DataConsumerGOBase[] dataConsumers = prefab.GetComponentsInChildren(typeof(DataConsumerGOBase)) as DataConsumerGOBase[];
                 foreach (Component component in dataConsumers)
                 {
-                    if (component is DataConsumerGOBase dataConsumer)
-                    {
-                        dataConsumer.Attach(DataSources, DataController, collectionItemKeyPathPrefix);
-                    }
+                    DataConsumerGOBase dataConsumer = component as DataConsumerGOBase;
+
+                    dataConsumer.Attach(DataSources, DataController, collectionItemKeyPathPrefix);
                 }
+#if OPTIMISATION_LISTPOOL
             }
+#endif // OPTIMISATION_LISTPOOL
         }
 
         /// <inheritdoc/>

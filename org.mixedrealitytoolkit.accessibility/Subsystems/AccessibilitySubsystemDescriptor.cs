@@ -110,6 +110,8 @@ namespace MixedReality.Toolkit.Accessibility
         }
     }
 
+#if ENABLE_VR && ENABLE_XR_MODULE
+
     /// <summary>
     /// Specifies a functionality description that may be registered for each implementation that provides the
     /// <see cref="AccessibilitySubsystem"/> interface.
@@ -177,4 +179,7 @@ namespace MixedReality.Toolkit.Accessibility
             return new AccessibilitySubsystemDescriptor(cinfo);
         }
     }
+
+#endif // ENABLE_VR && ENABLE_XR_MODULE
+
 }

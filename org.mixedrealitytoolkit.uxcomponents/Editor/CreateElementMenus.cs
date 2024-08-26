@@ -6,7 +6,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor.UI;
 using UnityEngine.EventSystems;
-//using UnityEngine.XR.Interaction.Toolkit.UI;
+#if ENABLE_VR && ENABLE_XR_MODULE
+using UnityEngine.XR.Interaction.Toolkit.UI;
+#endif // ENABLE_VR && ENABLE_XR_MODULE
 using Microsoft.MixedReality.GraphicsTools;
 using TMPro;
 using System.Reflection;
@@ -180,7 +182,9 @@ namespace MixedReality.Toolkit.Editor
             SetReasonableCanvasDefaults(canvas);
 
             Undo.AddComponent<GraphicRaycaster>(gameObject);
-            //Undo.AddComponent<TrackedDeviceGraphicRaycaster>(gameObject);
+#if ENABLE_VR && ENABLE_XR_MODULE
+            Undo.AddComponent<TrackedDeviceGraphicRaycaster>(gameObject);
+#endif // ENABLE_VR && ENABLE_XR_MODULE
 
             Undo.CollapseUndoOperations(group);
         }

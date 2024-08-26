@@ -646,9 +646,13 @@ namespace MixedReality.Toolkit.Data
 
         protected void FindComponentsOnGameObject(GameObject gameObject, Type componentType)
         {
+#if OPTIMISATION_LISTPOOL
             using (UnityEngine.Pool.ListPool<Component>.Get(out var componentsToScanForVariables))
             {
                 gameObject.GetComponents(componentType, componentsToScanForVariables);
+#else
+                Component[] componentsToScanForVariables = gameObject.GetComponents(componentType) as Component[];
+#endif // OPTIMISATION_LISTPOOL
                 foreach (Component component in componentsToScanForVariables)
                 {
                     if (ComponentMeetsAllQualifications(component))
@@ -656,7 +660,9 @@ namespace MixedReality.Toolkit.Data
                         _componentsToManage.Add(component);
                     }
                 }
+#if OPTIMISATION_LISTPOOL
             }
+#endif // OPTIMISATION_LISTPOOL
         }
 
         protected void FindUnmanagedComponentsInChildren(GameObject currentGameObject, Type componentTypeToManage)
@@ -669,7 +675,12 @@ namespace MixedReality.Toolkit.Data
                 {
                     GameObject childGameObject = childTransform.gameObject;
                     // Only check deeper on this branch if this type of DataConsumer is not already found on this game object.
+#if OPTIMISATION_TRYGET
                     if (!childGameObject.TryGetComponent(GetType(), out var _))
+#else
+                    Component thisDataConsumerType = childGameObject.GetComponent(GetType());
+                    if (thisDataConsumerType == null)
+#endif // OPTIMISATION_TRYGET
                     {
                         FindUnmanagedComponentsInChildren(childGameObject, componentTypeToManage);
                     }
@@ -738,18 +749,24 @@ namespace MixedReality.Toolkit.Data
             // walk from current GameObject up to root GameObject looking for an IDataSourceProvider
             while (currentGO != null)
             {
+#if OPTIMISATION_LISTPOOL
                 using (UnityEngine.Pool.ListPool<IDataSourceProvider>.Get(out var dataSourceComponents))
                 {
                     currentGO.GetComponents<IDataSourceProvider>(dataSourceComponents);
-                    foreach (var dataSourceComponent in dataSourceComponents)
+#else
+                    Component[] dataSourceComponents = currentGO.GetComponents(typeof(IDataSourceProvider));
+#endif // OPTIMISATION_LISTPOOL
+                    foreach (Component dataSourceComponent in dataSourceComponents)
                     {
                         if ((dataSourceComponent as MonoBehaviour).enabled)
                         {
-                            IDataSourceProvider dataSourceProvider = dataSourceComponent;
+                            IDataSourceProvider dataSourceProvider = dataSourceComponent as IDataSourceProvider;
                             AddDataSourcesFromProvider(dataSourceProvider, dataSourceTypes, dataSourcesInOut);
                         }
                     }
+#if OPTIMISATION_LISTPOOL
                 }
+#endif // OPTIMISATION_LISTPOOL
 
                 if (currentGO.transform.parent != null)
                 {
@@ -808,19 +825,24 @@ namespace MixedReality.Toolkit.Data
 
                 while (currentGO != null && defaultDataController == null)
                 {
+#if OPTIMISATION_LISTPOOL
                     using (UnityEngine.Pool.ListPool<IDataController>.Get(out var dataControllerComponents))
                     {
                         currentGO.GetComponents<IDataController>(dataControllerComponents);
-                        foreach (var dataControllerComponent in dataControllerComponents)
+#else
+                        Component[] dataControllerComponents = currentGO.GetComponents(typeof(IDataController));
+#endif // OPTIMISATION_LISTPOOL
+                        foreach (Component dataControllerComponent in dataControllerComponents)
                         {
                             if ((dataControllerComponent as MonoBehaviour).enabled)
                             {
-                                defaultDataController = dataControllerComponent;
+                                defaultDataController = dataControllerComponent as IDataController;
                                 break;
                             }
                         }
+#if OPTIMISATION_LISTPOOL
                     }
-
+#endif // OPTIMISATION_LISTPOOL
                     if (currentGO.transform.parent != null)
                     {
                         currentGO = currentGO.transform.parent.gameObject;

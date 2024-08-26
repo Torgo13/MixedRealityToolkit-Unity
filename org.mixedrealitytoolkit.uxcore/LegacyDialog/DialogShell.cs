@@ -100,14 +100,20 @@ namespace MixedReality.Toolkit.UX.Deprecated
             {
                 if (child.name == "ButtonParent")
                 {
+#if OPTIMISATION_LISTPOOL
                     using (UnityEngine.Pool.ListPool<DialogButton>.Get(out var buttons))
                     {
                         child.GetComponentsInChildren<DialogButton>(buttons);
+#else
+                        DialogButton[] buttons = child.GetComponentsInChildren<DialogButton>();
+#endif // OPTIMISATION_LISTPOOL
                         if (buttons != null)
                         {
                             buttonsOnDialog.AddRange(buttons);
                         }
+#if OPTIMISATION_LISTPOOL
                     }
+#endif // OPTIMISATION_LISTPOOL
                 }
             }
             return buttonsOnDialog;

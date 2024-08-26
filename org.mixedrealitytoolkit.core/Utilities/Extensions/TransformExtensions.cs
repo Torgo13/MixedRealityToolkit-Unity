@@ -100,20 +100,31 @@ namespace MixedReality.Toolkit
         /// If no colliders attached, returns a bounds of center and extents 0</returns>
         public static Bounds GetColliderBounds(this Transform transform)
         {
+#if OPTIMISATION_LISTPOOL
             using (UnityEngine.Pool.ListPool<Collider>.Get(out var colliders))
             {
                 transform.GetComponentsInChildren<Collider>(colliders);
                 int collidersCount = colliders.Count;
                 if (collidersCount == 0) { return new Bounds(); }
+#else
+                Collider[] colliders = transform.GetComponentsInChildren<Collider>();
+                if (colliders.Length == 0) { return new Bounds(); }
+#endif // OPTIMISATION_LISTPOOL
 
                 Bounds bounds = colliders[0].bounds;
+#if OPTIMISATION_LISTPOOL
                 for (int i = 1; i < collidersCount; i++)
+#else
+                for (int i = 1; i < colliders.Length; i++)
+#endif // OPTIMISATION_LISTPOOL
                 {
                     bounds.Encapsulate(colliders[i].bounds);
                 }
 
                 return bounds;
+#if OPTIMISATION_LISTPOOL
             }
+#endif // OPTIMISATION_LISTPOOL
         }
 
         /// <summary>
@@ -136,7 +147,7 @@ namespace MixedReality.Toolkit
         {
             foreach (Transform transform in startTransform.EnumerateAncestors(includeSelf))
             {
-                if (transform.TryGetComponent<T>(out var component))
+                if (transform.TryGetComponent(out T component))
                 {
                     return component;
                 }

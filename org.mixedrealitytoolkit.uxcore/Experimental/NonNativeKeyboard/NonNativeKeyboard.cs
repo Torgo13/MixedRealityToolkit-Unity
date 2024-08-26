@@ -2,7 +2,7 @@
 // Licensed under the BSD 3-Clause
 
 
-//using MixedReality.Toolkit.Subsystems;
+using MixedReality.Toolkit.Subsystems;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -189,10 +189,14 @@ namespace MixedReality.Toolkit.UX.Experimental
         /// </summary>
         public bool IsCapsLocked { get; private set; }
 
+#if ENABLE_VR && ENABLE_XR_MODULE
         /// <summary>
         /// Get if the dictation services are available for this device.
         /// </summary>
-        //private bool IsDictationAvailable => XRSubsystemHelpers.DictationSubsystem != null;
+        private bool IsDictationAvailable => XRSubsystemHelpers.DictationSubsystem != null;
+#else
+        private bool IsDictationAvailable => false;
+#endif // ENABLE_VR && ENABLE_XR_MODULE
 
         /// <summary>
         /// The panel that contains the alpha keys.
@@ -232,10 +236,12 @@ namespace MixedReality.Toolkit.UX.Experimental
         #endregion Properties
 
         #region Private fields
+#if ENABLE_VR && ENABLE_XR_MODULE
         /// <summary>
         /// The keyword recognition subsystem that was stopped by this component.
         /// </summary>
-        //private IKeywordRecognitionSubsystem keywordRecognitionSubsystem = null;
+        private IKeywordRecognitionSubsystem keywordRecognitionSubsystem = null;
+#endif // ENABLE_VR && ENABLE_XR_MODULE
 
         /// <summary>
         /// The inner text value set via the `Text` property
@@ -325,13 +331,13 @@ namespace MixedReality.Toolkit.UX.Experimental
         /// <summary>
         /// A Unity event function that is called on the frame when a script is enabled just before any of the update methods are called the first time.
         /// </summary>
-        /*protected void Start()
+        protected void Start()
         {
             if (DictationRecordIcon != null)
             {
                 DictationRecordIcon.gameObject.SetActive(IsDictationAvailable);
             }
-        }*/
+        }
 
         /// <summary>
         /// Intermediary function for text update events.
@@ -362,7 +368,9 @@ namespace MixedReality.Toolkit.UX.Experimental
             // Reset the keyboard layout for next use
             lastKeyboardLayout = LayoutType.Alpha;
             Clear();
-            //StopDictation();
+#if ENABLE_VR && ENABLE_XR_MODULE
+            StopDictation();
+#endif // ENABLE_VR && ENABLE_XR_MODULE
         }
 
         /// <summary>
@@ -495,9 +503,11 @@ namespace MixedReality.Toolkit.UX.Experimental
                     Backspace();
                     break;
 
-                /*case Function.Dictate:
+#if ENABLE_VR && ENABLE_XR_MODULE
+                case Function.Dictate:
                     ToggleDictation();
-                    break;*/
+                    break;
+#endif // ENABLE_VR && ENABLE_XR_MODULE
 
                 case Function.Undefined:
                 default:
@@ -609,10 +619,11 @@ namespace MixedReality.Toolkit.UX.Experimental
             }
         }
 
+#if ENABLE_VR && ENABLE_XR_MODULE
         /// <summary>
         /// Toggle dictation on or off,
         /// </summary>
-        /*public void ToggleDictation()
+        public void ToggleDictation()
         {
             if (isRecording)
             {
@@ -622,12 +633,12 @@ namespace MixedReality.Toolkit.UX.Experimental
             {
                 StartDictation();
             }
-        }*/
+        }
 
         /// <summary>
         /// Start dictation on a DictationSubsystem.
         /// </summary>
-        /*public void StartDictation()
+        public void StartDictation()
         {
             var dictationSubsystem = XRSubsystemHelpers.DictationSubsystem;
             if (dictationSubsystem != null && !isRecording)
@@ -647,26 +658,29 @@ namespace MixedReality.Toolkit.UX.Experimental
                 dictationSubsystem.RecognitionFaulted += OnDictationFaulted;
                 dictationSubsystem.StartDictation();
             }
-        }*/
+        }
 
         /// <summary>
         /// Stop dictation on the current DictationSubsystem.
         /// </summary>
-        /*public void StopDictation()
+        public void StopDictation()
         {
             var dictationSubsystem = XRSubsystemHelpers.DictationSubsystem;
             if (dictationSubsystem != null)
             {
                 dictationSubsystem.StopDictation();
             }
-        }*/
+        }
+#endif // ENABLE_VR && ENABLE_XR_MODULE
 
         /// <summary>
         /// Close the keyboard.
         /// </summary>
         public void Close()
         {
-            //StopDictation();
+#if ENABLE_VR && ENABLE_XR_MODULE
+            StopDictation();
+#endif // ENABLE_VR && ENABLE_XR_MODULE
             OnClose.Invoke(Text);
             gameObject.SetActive(false);
         }
@@ -770,13 +784,13 @@ namespace MixedReality.Toolkit.UX.Experimental
         /// <summary>
         /// Set mike recording look (red)
         /// </summary>
-        /*private void UpdateDictationRecordIconColor()
+        private void UpdateDictationRecordIconColor()
         {
             if (IsDictationAvailable && DictationRecordIcon != null)
             {
                 DictationRecordIcon.color = isRecording ? Color.red : dictationRecordIconDefaultColor;
             }
-        }*/
+        }
 
         /// <summary>
         /// Activates a specific keyboard layout, and any sub keys.
@@ -855,7 +869,7 @@ namespace MixedReality.Toolkit.UX.Experimental
         /// Called when dictation result is obtained
         /// </summary>
         /// <param name="eventData">Dictation event data</param>
-        /*private void OnDictationRecognizedResult(DictationResultEventArgs eventData)
+        private void OnDictationRecognizedResult(DictationResultEventArgs eventData)
         {
             var text = eventData.Result;
             ResetClosingTime();
@@ -891,6 +905,7 @@ namespace MixedReality.Toolkit.UX.Experimental
         /// </summary>
         private void HandleDictationShutdown()
         {
+#if ENABLE_VR && ENABLE_XR_MODULE
             var dictationSubsystem = XRSubsystemHelpers.DictationSubsystem;
             if (dictationSubsystem != null)
             {
@@ -907,7 +922,8 @@ namespace MixedReality.Toolkit.UX.Experimental
                 keywordRecognitionSubsystem.Start();
                 keywordRecognitionSubsystem = null;
             }
-        }*/
+#endif // ENABLE_VR && ENABLE_XR_MODULE
+        }
         #endregion Private Functions
     }
 }

@@ -110,6 +110,8 @@ namespace MixedReality.Toolkit.UX
         /// </summary>
         public void ToggleSolvers()
         {
+#if ENABLE_VR && ENABLE_XR_MODULE
+
 #if MRTK_SPATIAL_PRESENT
             if (TryGetComponent(out SolverHandler solverHandler))
             {
@@ -121,6 +123,8 @@ namespace MixedReality.Toolkit.UX
                 }
             }
 #endif
+
+#endif // ENABLE_VR && ENABLE_XR_MODULE
         }
 
         #region MonoBehaviour Implementation
@@ -390,6 +394,8 @@ namespace MixedReality.Toolkit.UX
         /// </summary>
         private void ApplyShellSolverParameters()
         {
+#if ENABLE_VR && ENABLE_XR_MODULE
+
 #if MRTK_SPATIAL_PRESENT
             if (TryGetComponent(out Follow solver))
             {
@@ -414,6 +420,8 @@ namespace MixedReality.Toolkit.UX
                 }
             }
 #endif
+
+#endif // ENABLE_VR && ENABLE_XR_MODULE
         }
     }
 }

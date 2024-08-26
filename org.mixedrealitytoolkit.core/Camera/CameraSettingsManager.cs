@@ -41,11 +41,11 @@ namespace MixedReality.Toolkit
         /// <summary>
         /// A Unity event function that is called on the frame when a script is enabled just before any of the update methods are called the first time.
         /// </summary> 
-        /*private void Start()
+        private void Start()
         {
             displayType = GetDisplayType();
             UpdateCameraSettings(displayType);
-        }*/
+        }
 
         private static readonly ProfilerMarker UpdatePerfMarker =
             new ProfilerMarker("[MRTK] CameraSettingsManager.Update");
@@ -53,7 +53,7 @@ namespace MixedReality.Toolkit
         /// <summary>
         /// A Unity event function that is called every frame, if this object is enabled.
         /// </summary>
-        /*private void Update()
+        private void Update()
         {
             using (UpdatePerfMarker.Auto())
             {
@@ -66,7 +66,7 @@ namespace MixedReality.Toolkit
                     displayType = type;
                 }
             }
-        }*/
+        }
 
         private static readonly ProfilerMarker UpdateCameraSettingsPerfMarker =
             new ProfilerMarker("[MRTK] CameraSettingsManager.UpdateCameraSettings");
@@ -129,13 +129,17 @@ namespace MixedReality.Toolkit
         /// If it is not possible to determine the type of display at the time GetDisplayType is called,
         /// <see cref="DisplayType.Transparent"/> will be returned.
         /// </remarks>
-        /*private DisplayType GetDisplayType()
+        private DisplayType GetDisplayType()
         {
             using (GetDisplayTypePerfMarker.Auto())
             {
+#if ENABLE_VR && ENABLE_XR_MODULE
                 if (XRSubsystemHelpers.DisplaySubsystem == null) { return DisplayType.Unknown; }
                 return XRSubsystemHelpers.DisplaySubsystem.displayOpaque ? DisplayType.Opaque : DisplayType.Transparent;
+#else
+                return DisplayType.Unknown;
+#endif // ENABLE_VR && ENABLE_XR_MODULE
             }
-        }*/
+        }
     }
 }

@@ -1,6 +1,8 @@
 // Copyright (c) Mixed Reality Toolkit Contributors
 // Licensed under the BSD 3-Clause
 
+#if ENABLE_VR && ENABLE_XR_MODULE
+
 using MixedReality.Toolkit.Subsystems;
 using System;
 using System.Collections.Generic;
@@ -573,3 +575,5 @@ namespace MixedReality.Toolkit.Input
         }
     }
 }
+
+#endif // ENABLE_VR && ENABLE_XR_MODULE

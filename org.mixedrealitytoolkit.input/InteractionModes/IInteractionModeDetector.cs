@@ -3,7 +3,9 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+#if ENABLE_VR && ENABLE_XR_MODULE
 using UnityEngine.XR.Interaction.Toolkit;
+#endif // ENABLE_VR && ENABLE_XR_MODULE
 
 
 namespace MixedReality.Toolkit.Input

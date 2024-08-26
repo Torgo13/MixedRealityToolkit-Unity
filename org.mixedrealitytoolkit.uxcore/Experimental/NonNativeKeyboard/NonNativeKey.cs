@@ -19,11 +19,13 @@ namespace MixedReality.Toolkit.UX.Experimental
     /// </remarks>
     public abstract class NonNativeKey : MonoBehaviour
     {
+#if ENABLE_VR && ENABLE_XR_MODULE
         /// <summary>
         /// Reference to the GameObject's interactable component. 
         /// </summary>
-        //[field: SerializeField, Experimental, Tooltip("Reference to the GameObject's interactable component.")]
-        //protected StatefulInteractable Interactable { get; set; }
+        [field: SerializeField, Experimental, Tooltip("Reference to the GameObject's interactable component.")]
+        protected StatefulInteractable Interactable { get; set; }
+#endif // ENABLE_VR && ENABLE_XR_MODULE
 
         /// <summary>
         /// Reference to the GameObject's button component. Used if there is no StatefulInteractable.
@@ -36,7 +38,8 @@ namespace MixedReality.Toolkit.UX.Experimental
         /// </summary>
         protected virtual void Awake()
         {
-            /*if (Interactable == null)
+#if ENABLE_VR && ENABLE_XR_MODULE
+            if (Interactable == null)
             {
                 Interactable = GetComponent<StatefulInteractable>();
             }
@@ -46,7 +49,8 @@ namespace MixedReality.Toolkit.UX.Experimental
             {
                 Interactable.OnClicked.AddListener(FireKey);
             }
-            else*/
+            else
+#endif // ENABLE_VR && ENABLE_XR_MODULE
             {
                 if (KeyButton == null)
                 {
@@ -64,14 +68,21 @@ namespace MixedReality.Toolkit.UX.Experimental
         /// </summary>
         protected virtual void OnDestroy()
         {
-            /*if (Interactable != null)
+#if ENABLE_VR && ENABLE_XR_MODULE
+            if (Interactable != null)
             {
                 Interactable.OnClicked.RemoveListener(FireKey);
             }
-            else*/ if (KeyButton != null)
+            else if (KeyButton != null)
             {
                 KeyButton.onClick.RemoveListener(FireKey);
             }
+#else
+            if (KeyButton != null)
+            {
+                KeyButton.onClick.RemoveListener(FireKey);
+            }
+#endif // ENABLE_VR && ENABLE_XR_MODULE
         }
 
         /// <summary>

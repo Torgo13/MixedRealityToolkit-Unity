@@ -1,6 +1,8 @@
 // Copyright (c) Mixed Reality Toolkit Contributors
 // Licensed under the BSD 3-Clause
 
+#if ENABLE_VR && ENABLE_XR_MODULE
+
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using static MixedReality.Toolkit.Input.XRRayInteractorExtensions;
@@ -136,3 +138,5 @@ namespace MixedReality.Toolkit.Input.Experimental
         }
     }
 }
+
+#endif // ENABLE_VR && ENABLE_XR_MODULE

@@ -50,16 +50,22 @@ namespace MixedReality.Toolkit
         public static void ApplyToHierarchy(this GameObject root, Action<GameObject> action)
         {
             action(root);
+#if OPTIMISATION_LISTPOOL
             using (UnityEngine.Pool.ListPool<Transform>.Get(out var items))
             {
                 root.GetComponentsInChildren<Transform>(items);
                 int count = items.Count;
-
+#else
+                Transform[] items = root.GetComponentsInChildren<Transform>();
+                int count = items.Length;
+#endif // OPTIMISATION_LISTPOOL
                 for (var i = 0; i < count; i++)
                 {
                     action(items[i].gameObject);
                 }
+#if OPTIMISATION_LISTPOOL
             }
+#endif // OPTIMISATION_LISTPOOL
         }
 
         /// <summary>
@@ -82,16 +88,22 @@ namespace MixedReality.Toolkit
         /// <param name="action">Action to perform.</param>
         public static void ForEachComponent<T>(this GameObject gameObject, Action<T> action) where T : Component
         {
+#if OPTIMISATION_LISTPOOL
             using (UnityEngine.Pool.ListPool<T>.Get(out var components))
             {
                 gameObject.GetComponents<T>(components);
                 int count = components.Count;
-
+#else
+                T[] components = gameObject.GetComponents<T>();
+                int count = components.Length;
+#endif // OPTIMISATION_LISTPOOL
                 for (int i = 0; i < count; i++)
                 {
                     action(components[i]);
                 }
+#if OPTIMISATION_LISTPOOL
             }
+#endif // OPTIMISATION_LISTPOOL
         }
 
         /// <summary>
@@ -108,11 +120,15 @@ namespace MixedReality.Toolkit
             requiringTypes = null;
 
 #if UNITY_EDITOR
+#if OPTIMISATION_LISTPOOL
             using (UnityEngine.Pool.ListPool<MonoBehaviour>.Get(out var monoBehaviours))
             {
                 gameObject.GetComponents<MonoBehaviour>(monoBehaviours);
                 int count = monoBehaviours.Count;
-
+#else
+                MonoBehaviour[] monoBehaviours = gameObject.GetComponents<MonoBehaviour>();
+                int count = monoBehaviours.Length;
+#endif // OPTIMISATION_LISTPOOL
                 for (int i = 0; i < count; i++)
                 {
                     if (monoBehaviours[i] == null)
@@ -137,7 +153,9 @@ namespace MixedReality.Toolkit
                         }
                     }
                 }
+#if OPTIMISATION_LISTPOOL
             }
+#endif // OPTIMISATION_LISTPOOL
 #endif // UNITY_EDITOR
 
             return requiringTypes != null;

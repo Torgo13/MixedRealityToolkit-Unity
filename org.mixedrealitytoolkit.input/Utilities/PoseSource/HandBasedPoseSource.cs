@@ -1,6 +1,8 @@
 // Copyright (c) Mixed Reality Toolkit Contributors
 // Licensed under the BSD 3-Clause
 
+#if ENABLE_VR && ENABLE_XR_MODULE
+
 using System;
 using MixedReality.Toolkit.Subsystems;
 using UnityEngine;
@@ -31,3 +33,5 @@ namespace MixedReality.Toolkit.Input
         public abstract bool TryGetPose(out Pose pose);
     }
 }
+
+#endif // ENABLE_VR && ENABLE_XR_MODULE

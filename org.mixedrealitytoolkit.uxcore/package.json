@@ -24,5 +24,8 @@
   "msftOptionalPackages": {
     "org.mixedrealitytoolkit.data": "1.0.0-development",
     "org.mixedrealitytoolkit.spatialmanipulation": "3.0.0"
+  },
+  "msftTestDependencies": {
+    "org.mixedrealitytoolkit.input": "3.0.0"
   }
 }

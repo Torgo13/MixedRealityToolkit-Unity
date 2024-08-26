@@ -1,6 +1,8 @@
 // Copyright (c) Mixed Reality Toolkit Contributors
 // Licensed under the BSD 3-Clause
 
+#if ENABLE_VR && ENABLE_XR_MODULE
+
 using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -799,3 +801,5 @@ namespace MixedReality.Toolkit.SpatialManipulation
         private static bool IsNormalVertical(Vector3 normal) => 1f - Mathf.Abs(normal.y) < 0.01f;
     }
 }
+
+#endif // ENABLE_VR && ENABLE_XR_MODULE

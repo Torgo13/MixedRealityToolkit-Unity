@@ -1,6 +1,8 @@
 // Copyright (c) Mixed Reality Toolkit Contributors
 // Licensed under the BSD 3-Clause
 
+#if ENABLE_VR && ENABLE_XR_MODULE
+
 using System;
 
 namespace MixedReality.Toolkit.Input
@@ -25,3 +27,5 @@ namespace MixedReality.Toolkit.Input
         public NearInteractionModeDetector NearInteractionModeDetector { get; private set; }
     }
 }
+
+#endif // ENABLE_VR && ENABLE_XR_MODULE

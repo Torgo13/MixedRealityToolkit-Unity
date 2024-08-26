@@ -5,7 +5,12 @@
         "MixedReality.Toolkit.Core",
         "MixedReality.Toolkit.Data",
         "Microsoft.MixedReality.GraphicsTools",
-        "Unity.TextMeshPro"
+        "Unity.InputSystem",
+        "Unity.TextMeshPro",
+        "Unity.XR.Interaction.Toolkit",
+        "Unity.XR.CoreUtils",
+        "MixedReality.Toolkit.SpatialManipulation",
+        "MixedReality.Toolkit.Input"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -19,6 +24,16 @@
             "name": "org.mixedrealitytoolkit.data",
             "expression": "",
             "define": "MRTK_DATA_PRESENT"
+        },
+        {
+            "name": "org.mixedrealitytoolkit.spatialmanipulation",
+            "expression": "",
+            "define": "MRTK_SPATIAL_PRESENT"
+        },
+        {
+            "name": "org.mixedrealitytoolkit.input",
+            "expression": "",
+            "define": "MRTK_INPUT_PRESENT"
         },
         {
             "name": "org.mixedrealitytoolkit.windowsspeech",

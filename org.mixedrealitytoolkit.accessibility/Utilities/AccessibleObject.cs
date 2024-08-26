@@ -113,6 +113,8 @@ namespace MixedReality.Toolkit.Accessibility
 
         #region Monobehaviour methods
 
+#if ENABLE_VR && ENABLE_XR_MODULE
+
         private static bool suppressSubsystemNotFound = false;
 
         /// <summary>
@@ -144,6 +146,8 @@ namespace MixedReality.Toolkit.Accessibility
                 Debug.LogError($"Failed to unregister {gameObject.name} with the accessibility subsystem.");
             }
         }
+
+#endif // ENABLE_VR && ENABLE_XR_MODULE
 
         #endregion Monobehavior methods
     }

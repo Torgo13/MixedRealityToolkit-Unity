@@ -1,6 +1,8 @@
 // Copyright (c) Mixed Reality Toolkit Contributors
 // Licensed under the BSD 3-Clause
 
+#if ENABLE_VR && ENABLE_XR_MODULE
+
 using MixedReality.Toolkit.Subsystems;
 
 #if MROPENXR_PRESENT && (UNITY_EDITOR_WIN || UNITY_WSA || UNITY_STANDALONE_WIN || UNITY_ANDROID)
@@ -259,3 +261,5 @@ namespace MixedReality.Toolkit.Input
 #endif // MROPENXR_PRESENT
     }
 }
+
+#endif // ENABLE_VR && ENABLE_XR_MODULE

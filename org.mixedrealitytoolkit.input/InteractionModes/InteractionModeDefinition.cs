@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+#if ENABLE_VR && ENABLE_XR_MODULE
 using UnityEngine.XR.Interaction.Toolkit;
+#endif // ENABLE_VR && ENABLE_XR_MODULE
 
 namespace MixedReality.Toolkit.Input
 {
@@ -26,7 +28,9 @@ namespace MixedReality.Toolkit.Input
 
         // private field to ensure serialization
         [SerializeField]
+#if ENABLE_VR && ENABLE_XR_MODULE
         [Extends(typeof(XRBaseInteractor), TypeGrouping.ByNamespaceFlat)]
+#endif // ENABLE_VR && ENABLE_XR_MODULE
         [Tooltip("The class types of the interactors that this Interaction Mode Definition instance is targeting.")]
         private List<SystemType> associatedTypes = new List<SystemType>();
 

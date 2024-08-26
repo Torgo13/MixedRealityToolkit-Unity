@@ -1,6 +1,8 @@
 // Copyright (c) Mixed Reality Toolkit Contributors
 // Licensed under the BSD 3-Clause
 
+#if ENABLE_VR && ENABLE_XR_MODULE
+
 using UnityEditor;
 
 namespace MixedReality.Toolkit.SpatialManipulation.Editor
@@ -53,3 +55,5 @@ namespace MixedReality.Toolkit.SpatialManipulation.Editor
         }
     }
 }
+
+#endif // ENABLE_VR && ENABLE_XR_MODULE
