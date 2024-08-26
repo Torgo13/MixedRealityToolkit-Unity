@@ -31,15 +31,13 @@ namespace MixedReality.Toolkit.Speech.Windows
         DisplayName = "Windows Text-To-Speech Subsystem",
         Author = "Microsoft",
         ProviderType = typeof(WindowsTextToSpeechSubsystemProvider),
+#if ENABLE_VR && ENABLE_XR_MODULE
         SubsystemTypeOverride = typeof(WindowsTextToSpeechSubsystem),
+#endif // ENABLE_VR && ENABLE_XR_MODULE
         ConfigType = typeof(WindowsTextToSpeechSubsystemConfig))]
 #if ENABLE_VR && ENABLE_XR_MODULE
     public class WindowsTextToSpeechSubsystem : TextToSpeechSubsystem
-#else
-    public class WindowsTextToSpeechSubsystem
-#endif // ENABLE_VR && ENABLE_XR_MODULE
     {
-#if ENABLE_VR && ENABLE_XR_MODULE
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void Register()
         {
@@ -57,11 +55,11 @@ namespace MixedReality.Toolkit.Speech.Windows
         /// A subsystem provider for <see cref="WindowsTextToSpeechSubsystem"/> that exposes methods on the Windows
         /// speech synthesizer systems.
         /// </summary>
-        [Preserve]
 #if ENABLE_VR && ENABLE_XR_MODULE
+        [Preserve]
         class WindowsTextToSpeechSubsystemProvider : Provider
 #else
-        class WindowsTextToSpeechSubsystemProvider
+        public class WindowsTextToSpeechSubsystemProvider
 #endif // ENABLE_VR && ENABLE_XR_MODULE
         {
             private WindowsTextToSpeechSubsystemConfig config;
@@ -205,7 +203,11 @@ namespace MixedReality.Toolkit.Speech.Windows
 #elif (UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN)
                 return await Task<byte[]>.Run(() =>
                 {
+#if ENABLE_VR && ENABLE_XR_MODULE
                     if (!Microsoft.MixedReality.Toolkit.Speech.Windows.WinRTTextToSpeechPInvokes.TrySynthesizePhraseWithCustomVoice(phrase, config.VoiceName, out IntPtr nativeData, out int length))
+#else
+                    if (!Microsoft.MixedReality.Toolkit.Speech.Windows.WinRTTextToSpeechPInvokes.TrySynthesizePhrase(phrase, out IntPtr nativeData, out int length))
+#endif // ENABLE_VR && ENABLE_XR_MODULE
                     {
                         Debug.LogError("Failed to synthesize the phrase");
                         return null;
@@ -219,7 +221,7 @@ namespace MixedReality.Toolkit.Speech.Windows
                     return waveData;
                 });
 #else
-                if (!haveLogged)
+                        if (!haveLogged)
                 {
                     Debug.LogError("The Windows Text-To-Speech subsystem is not supported on the current platform.");
                     haveLogged = true;
@@ -230,5 +232,7 @@ namespace MixedReality.Toolkit.Speech.Windows
 
 #endregion TextToSpeechSubsystem implementation
         }
+#if ENABLE_VR && ENABLE_XR_MODULE
     }
+#endif // ENABLE_VR && ENABLE_XR_MODULE
 }

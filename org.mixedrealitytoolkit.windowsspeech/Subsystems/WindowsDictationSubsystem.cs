@@ -1,8 +1,6 @@
 // Copyright (c) Mixed Reality Toolkit Contributors
 // Licensed under the BSD 3-Clause
 
-#if ENABLE_VR && ENABLE_XR_MODULE
-
 using MixedReality.Toolkit.Subsystems;
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -27,8 +25,11 @@ namespace MixedReality.Toolkit.Speech.Windows
         DisplayName = "MRTK Windows Dictation Subsystem",
         Author = "Mixed Reality Toolkit Contributors",
         ProviderType = typeof(WindowsDictationProvider),
+#if ENABLE_VR && ENABLE_XR_MODULE
         SubsystemTypeOverride = typeof(WindowsDictationSubsystem),
+#endif // ENABLE_VR && ENABLE_XR_MODULE
         ConfigType = typeof(WindowsDictationSubsystemConfig))]
+#if ENABLE_VR && ENABLE_XR_MODULE
     public class WindowsDictationSubsystem : DictationSubsystem
     {
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -42,13 +43,18 @@ namespace MixedReality.Toolkit.Speech.Windows
                 Debug.LogError($"Failed to register the {cinfo.Name} subsystem.");
             }
         }
+#endif // ENABLE_VR && ENABLE_XR_MODULE
 
         /// <summary>
         /// A subsystem provider used with <see cref="WindowsDictationSubsystem"/> class that exposes methods on Unity's `DictationRecognizer`
         /// on Windows platforms.
         /// </summary>
+#if ENABLE_VR && ENABLE_XR_MODULE
         [Preserve]
         class WindowsDictationProvider : Provider
+#else
+        public class WindowsDictationProvider
+#endif // ENABLE_VR && ENABLE_XR_MODULE
         {
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_WSA
             /// <summary>
@@ -113,24 +119,40 @@ namespace MixedReality.Toolkit.Speech.Windows
 
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_WSA
             /// <inheritdoc/>
+#if ENABLE_VR && ENABLE_XR_MODULE
             public override void Start()
+#else
+            public void Start()
+#endif // ENABLE_VR && ENABLE_XR_MODULE
             {
+#if ENABLE_VR && ENABLE_XR_MODULE
                 base.Start();
                 config = XRSubsystemHelpers.GetConfiguration<WindowsDictationSubsystemConfig, WindowsDictationSubsystem>();
+#endif // ENABLE_VR && ENABLE_XR_MODULE
                 confidenceLevel = config.ConfidenceLevel;
                 initialSilenceTimeoutSeconds = config.InitialSilenceTimeoutSeconds;
                 autoSilenceTimeout = config.AutoSilenceTimeout;
             }
 
+#if ENABLE_VR && ENABLE_XR_MODULE
             public override void Stop()
+#else
+            public void Stop()
+#endif // ENABLE_VR && ENABLE_XR_MODULE
             {
+#if ENABLE_VR && ENABLE_XR_MODULE
                 base.Stop();
+#endif // ENABLE_VR && ENABLE_XR_MODULE
                 StopDictation();
             }
 #endif
 
             /// <inheritdoc/>
+#if ENABLE_VR && ENABLE_XR_MODULE
             public override void Destroy()
+#else
+            public void Destroy()
+#endif // ENABLE_VR && ENABLE_XR_MODULE
             {
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_WSA
                 if (dictationRecognizer != null)
@@ -173,7 +195,11 @@ namespace MixedReality.Toolkit.Speech.Windows
             #region IDictationSubsystem implementation
 
             /// <inheritdoc/>
+#if ENABLE_VR && ENABLE_XR_MODULE
             public override void StartDictation()
+#else
+            public void StartDictation()
+#endif // ENABLE_VR && ENABLE_XR_MODULE
             {
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_WSA
                 StartDictation(confidenceLevel);
@@ -183,7 +209,11 @@ namespace MixedReality.Toolkit.Speech.Windows
             }
 
             /// <inheritdoc/>
+#if ENABLE_VR && ENABLE_XR_MODULE
             public override void StopDictation()
+#else
+            public void StopDictation()
+#endif // ENABLE_VR && ENABLE_XR_MODULE
             {
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_WSA
                 if (dictationRecognizer != null && dictationRecognizer.Status == SpeechSystemStatus.Running)
@@ -195,7 +225,7 @@ namespace MixedReality.Toolkit.Speech.Windows
 #endif
             }
 
-            #endregion IDictationSubsystem implementation
+#endregion IDictationSubsystem implementation
 
             #region Helpers
 
@@ -224,7 +254,9 @@ namespace MixedReality.Toolkit.Speech.Windows
             private void DictationRecognizer_DictationHypothesis(string text)
             {
                 DictationResultEventArgs eventArgs = new DictationResultEventArgs(text, null);
+#if ENABLE_VR && ENABLE_XR_MODULE
                 OnRecognizing(eventArgs);
+#endif // ENABLE_VR && ENABLE_XR_MODULE
             }
 
             /// <summary>
@@ -235,7 +267,9 @@ namespace MixedReality.Toolkit.Speech.Windows
             private void DictationRecognizer_DictationResult(string text, ConfidenceLevel confidence)
             {
                 DictationResultEventArgs eventArgs = new DictationResultEventArgs(text, ConfidenceLevelToFloat(confidence));
+#if ENABLE_VR && ENABLE_XR_MODULE
                 OnRecognized(eventArgs);
+#endif // ENABLE_VR && ENABLE_XR_MODULE
             }
 
             /// <summary>
@@ -247,7 +281,9 @@ namespace MixedReality.Toolkit.Speech.Windows
             {
                 DictationSessionEventArgs eventArgs = new DictationSessionEventArgs(ToDictationEventReason(cause),
                     cause.ToString());
+#if ENABLE_VR && ENABLE_XR_MODULE
                 OnRecognitionFinished(eventArgs);
+#endif // ENABLE_VR && ENABLE_XR_MODULE
             }
 
             /// <summary>
@@ -259,7 +295,9 @@ namespace MixedReality.Toolkit.Speech.Windows
             {
                 DictationSessionEventArgs eventArgs = new DictationSessionEventArgs(DictationEventReason.UnknownFailure,
                     error.ToString() + "\nHRESULT: " + hresult);
+#if ENABLE_VR && ENABLE_XR_MODULE
                 OnRecognitionFaulted(eventArgs);
+#endif // ENABLE_VR && ENABLE_XR_MODULE
             }
 
             private float ConfidenceLevelToFloat(ConfidenceLevel level)
@@ -291,9 +329,11 @@ namespace MixedReality.Toolkit.Speech.Windows
             }
 #endif
 
-            #endregion Helpers
+#endregion Helpers
+
+#if ENABLE_VR && ENABLE_XR_MODULE
         }
+#endif // ENABLE_VR && ENABLE_XR_MODULE
     }
 }
 
-#endif // ENABLE_VR && ENABLE_XR_MODULE
