@@ -1,8 +1,6 @@
 // Copyright (c) Mixed Reality Toolkit Contributors
 // Licensed under the BSD 3-Clause
 
-#if ENABLE_VR && ENABLE_XR_MODULE
-
 using MixedReality.Toolkit.Subsystems;
 using System;
 using System.Runtime.InteropServices;
@@ -35,8 +33,13 @@ namespace MixedReality.Toolkit.Speech.Windows
         ProviderType = typeof(WindowsTextToSpeechSubsystemProvider),
         SubsystemTypeOverride = typeof(WindowsTextToSpeechSubsystem),
         ConfigType = typeof(WindowsTextToSpeechSubsystemConfig))]
+#if ENABLE_VR && ENABLE_XR_MODULE
     public class WindowsTextToSpeechSubsystem : TextToSpeechSubsystem
+#else
+    public class WindowsTextToSpeechSubsystem
+#endif // ENABLE_VR && ENABLE_XR_MODULE
     {
+#if ENABLE_VR && ENABLE_XR_MODULE
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void Register()
         {
@@ -48,13 +51,18 @@ namespace MixedReality.Toolkit.Speech.Windows
                 Debug.LogError($"Failed to register the {cinfo.Name} subsystem.");
             }
         }
+#endif // ENABLE_VR && ENABLE_XR_MODULE
 
         /// <summary>
         /// A subsystem provider for <see cref="WindowsTextToSpeechSubsystem"/> that exposes methods on the Windows
         /// speech synthesizer systems.
         /// </summary>
         [Preserve]
+#if ENABLE_VR && ENABLE_XR_MODULE
         class WindowsTextToSpeechSubsystemProvider : Provider
+#else
+        class WindowsTextToSpeechSubsystemProvider
+#endif // ENABLE_VR && ENABLE_XR_MODULE
         {
             private WindowsTextToSpeechSubsystemConfig config;
 #if WINDOWS_UWP
@@ -65,6 +73,7 @@ namespace MixedReality.Toolkit.Speech.Windows
             public WindowsTextToSpeechSubsystemProvider() : base()
             { }
 
+#if ENABLE_VR && ENABLE_XR_MODULE
             /// <inheritdoc/>
             public override void Start()
             {
@@ -84,6 +93,7 @@ namespace MixedReality.Toolkit.Speech.Windows
                 }
 #endif // WINDOWS_UWP
             }
+#endif // ENABLE_VR && ENABLE_XR_MODULE
 
             #region ITextToSpeechSubsystem implementation
 
@@ -92,7 +102,11 @@ namespace MixedReality.Toolkit.Speech.Windows
 #endif
 
             /// <inheritdoc/>
+#if ENABLE_VR && ENABLE_XR_MODULE
             public override async Task<bool> TrySpeak(string phrase, AudioSource audioSource)
+#else
+            public async Task<bool> TrySpeak(string phrase, AudioSource audioSource)
+#endif // ENABLE_VR && ENABLE_XR_MODULE
             {
                 if (audioSource == null)
                 {
@@ -214,9 +228,7 @@ namespace MixedReality.Toolkit.Speech.Windows
 #endif
             }
 
-            #endregion TextToSpeechSubsystem implementation
+#endregion TextToSpeechSubsystem implementation
         }
     }
 }
-
-#endif // ENABLE_VR && ENABLE_XR_MODULE
