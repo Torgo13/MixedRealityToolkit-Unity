@@ -51,21 +51,17 @@ namespace MixedReality.Toolkit
         {
             action(root);
 #if OPTIMISATION_LISTPOOL
-            using (UnityEngine.Pool.ListPool<Transform>.Get(out var items))
-            {
-                root.GetComponentsInChildren<Transform>(items);
-                int count = items.Count;
+            using var _ = (UnityEngine.Pool.ListPool<Transform>.Get(out var items);
+            root.GetComponentsInChildren<Transform>(items);
+            int count = items.Count;
 #else
-                Transform[] items = root.GetComponentsInChildren<Transform>();
-                int count = items.Length;
+            Transform[] items = root.GetComponentsInChildren<Transform>();
+            int count = items.Length;
 #endif // OPTIMISATION_LISTPOOL
-                for (var i = 0; i < count; i++)
-                {
-                    action(items[i].gameObject);
-                }
-#if OPTIMISATION_LISTPOOL
+            for (var i = 0; i < count; i++)
+            {
+                action(items[i].gameObject);
             }
-#endif // OPTIMISATION_LISTPOOL
         }
 
         /// <summary>
@@ -89,21 +85,17 @@ namespace MixedReality.Toolkit
         public static void ForEachComponent<T>(this GameObject gameObject, Action<T> action) where T : Component
         {
 #if OPTIMISATION_LISTPOOL
-            using (UnityEngine.Pool.ListPool<T>.Get(out var components))
-            {
-                gameObject.GetComponents<T>(components);
-                int count = components.Count;
+            using var _ = UnityEngine.Pool.ListPool<T>.Get(out var components);
+            gameObject.GetComponents<T>(components);
+            int count = components.Count;
 #else
-                T[] components = gameObject.GetComponents<T>();
-                int count = components.Length;
+            T[] components = gameObject.GetComponents<T>();
+            int count = components.Length;
 #endif // OPTIMISATION_LISTPOOL
-                for (int i = 0; i < count; i++)
-                {
-                    action(components[i]);
-                }
-#if OPTIMISATION_LISTPOOL
+            for (int i = 0; i < count; i++)
+            {
+                action(components[i]);
             }
-#endif // OPTIMISATION_LISTPOOL
         }
 
         /// <summary>
@@ -121,41 +113,37 @@ namespace MixedReality.Toolkit
 
 #if UNITY_EDITOR
 #if OPTIMISATION_LISTPOOL
-            using (UnityEngine.Pool.ListPool<MonoBehaviour>.Get(out var monoBehaviours))
-            {
-                gameObject.GetComponents<MonoBehaviour>(monoBehaviours);
-                int count = monoBehaviours.Count;
+            using var _ = UnityEngine.Pool.ListPool<MonoBehaviour>.Get(out var monoBehaviours);
+            gameObject.GetComponents<MonoBehaviour>(monoBehaviours);
+            int count = monoBehaviours.Count;
 #else
-                MonoBehaviour[] monoBehaviours = gameObject.GetComponents<MonoBehaviour>();
-                int count = monoBehaviours.Length;
+            MonoBehaviour[] monoBehaviours = gameObject.GetComponents<MonoBehaviour>();
+            int count = monoBehaviours.Length;
 #endif // OPTIMISATION_LISTPOOL
-                for (int i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
+            {
+                if (monoBehaviours[i] == null)
                 {
-                    if (monoBehaviours[i] == null)
-                    {
-                        continue;
-                    }
+                    continue;
+                }
 
-                    var monoBehaviourType = monoBehaviours[i].GetType();
-                    var attributes = Attribute.GetCustomAttributes(monoBehaviourType);
+                var monoBehaviourType = monoBehaviours[i].GetType();
+                var attributes = Attribute.GetCustomAttributes(monoBehaviourType);
 
-                    foreach (var attribute in attributes)
+                foreach (var attribute in attributes)
+                {
+                    if (attribute is RequireComponent requireComponentAttribute)
                     {
-                        if (attribute is RequireComponent requireComponentAttribute)
+                        if (requireComponentAttribute.m_Type0 == genericType ||
+                            requireComponentAttribute.m_Type1 == genericType ||
+                            requireComponentAttribute.m_Type2 == genericType)
                         {
-                            if (requireComponentAttribute.m_Type0 == genericType ||
-                                requireComponentAttribute.m_Type1 == genericType ||
-                                requireComponentAttribute.m_Type2 == genericType)
-                            {
-                                requiringTypes ??= new List<Type>();
-                                requiringTypes.Add(monoBehaviourType);
-                            }
+                            requiringTypes ??= new List<Type>();
+                            requiringTypes.Add(monoBehaviourType);
                         }
                     }
                 }
-#if OPTIMISATION_LISTPOOL
             }
-#endif // OPTIMISATION_LISTPOOL
 #endif // UNITY_EDITOR
 
             return requiringTypes != null;

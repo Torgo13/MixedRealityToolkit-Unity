@@ -101,30 +101,26 @@ namespace MixedReality.Toolkit
         public static Bounds GetColliderBounds(this Transform transform)
         {
 #if OPTIMISATION_LISTPOOL
-            using (UnityEngine.Pool.ListPool<Collider>.Get(out var colliders))
+            using var _ = UnityEngine.Pool.ListPool<Collider>.Get(out var colliders);
+            transform.GetComponentsInChildren<Collider>(colliders);
+            int collidersCount = colliders.Count;
+            if (collidersCount == 0) { return new Bounds(); }
+#else
+            Collider[] colliders = transform.GetComponentsInChildren<Collider>();
+            if (colliders.Length == 0) { return new Bounds(); }
+#endif // OPTIMISATION_LISTPOOL
+
+            Bounds bounds = colliders[0].bounds;
+#if OPTIMISATION_LISTPOOL
+            for (int i = 1; i < collidersCount; i++)
+#else
+            for (int i = 1; i < colliders.Length; i++)
+#endif // OPTIMISATION_LISTPOOL
             {
-                transform.GetComponentsInChildren<Collider>(colliders);
-                int collidersCount = colliders.Count;
-                if (collidersCount == 0) { return new Bounds(); }
-#else
-                Collider[] colliders = transform.GetComponentsInChildren<Collider>();
-                if (colliders.Length == 0) { return new Bounds(); }
-#endif // OPTIMISATION_LISTPOOL
-
-                Bounds bounds = colliders[0].bounds;
-#if OPTIMISATION_LISTPOOL
-                for (int i = 1; i < collidersCount; i++)
-#else
-                for (int i = 1; i < colliders.Length; i++)
-#endif // OPTIMISATION_LISTPOOL
-                {
-                    bounds.Encapsulate(colliders[i].bounds);
-                }
-
-                return bounds;
-#if OPTIMISATION_LISTPOOL
+                bounds.Encapsulate(colliders[i].bounds);
             }
-#endif // OPTIMISATION_LISTPOOL
+
+            return bounds;
         }
 
         /// <summary>

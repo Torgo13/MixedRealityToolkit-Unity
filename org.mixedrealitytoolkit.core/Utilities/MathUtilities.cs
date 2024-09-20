@@ -552,7 +552,11 @@ namespace MixedReality.Toolkit
         /// <param name="max">if pos is more than max, lerp clamps to this value</param>
         /// <param name="clampFactor"> Range from 0.0f to 1.0f of how close to snap to min and max </param>
         /// <returns>A soft clamped value</returns>
+#if SPELLING
+        public static float ClampLerp(float pos, float min, float max, float clampFactor)
+#else
         public static float CLampLerp(float pos, float min, float max, float clampFactor)
+#endif // SPELLING
         {
             clampFactor = Mathf.Clamp(clampFactor, 0.0f, 1.0f);
             if (pos < min)

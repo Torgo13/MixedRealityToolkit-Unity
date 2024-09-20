@@ -103,68 +103,63 @@ namespace MixedReality.Toolkit
             }
 
 #if OPTIMISATION_LISTPOOL
-            using (UnityEngine.Pool.HashSetPool<float>.Get(out var cachedKeyTimes))
-            {
+            using var _ = UnityEngine.Pool.HashSetPool<float>.Get(out var cachedKeyTimes);
 #else
-                // List of all the unique key times
-                cachedKeyTimes.Clear();
+            // List of all the unique key times
+            cachedKeyTimes.Clear();
 #endif // OPTIMISATION_LISTPOOL
 
-                if (!noColor)
+            if (!noColor)
+            {
+                for (int i = 0; i < a.colorKeys.Length; i++)
                 {
-                    for (int i = 0; i < a.colorKeys.Length; i++)
-                    {
-                        float k = a.colorKeys[i].time;
-                        if (!cachedKeyTimes.Contains(k))
-                            cachedKeyTimes.Add(k);
-                    }
-
-                    for (int i = 0; i < b.colorKeys.Length; i++)
-                    {
-                        float k = b.colorKeys[i].time;
-                        if (!cachedKeyTimes.Contains(k))
-                            cachedKeyTimes.Add(k);
-                    }
+                    float k = a.colorKeys[i].time;
+                    if (!cachedKeyTimes.Contains(k))
+                        cachedKeyTimes.Add(k);
                 }
 
-                if (!noAlpha)
+                for (int i = 0; i < b.colorKeys.Length; i++)
                 {
-                    for (int i = 0; i < a.alphaKeys.Length; i++)
-                    {
-                        float k = a.alphaKeys[i].time;
-                        if (!cachedKeyTimes.Contains(k))
-                            cachedKeyTimes.Add(k);
-                    }
-
-                    for (int i = 0; i < b.alphaKeys.Length; i++)
-                    {
-                        float k = b.alphaKeys[i].time;
-                        if (!cachedKeyTimes.Contains(k))
-                            cachedKeyTimes.Add(k);
-                    }
+                    float k = b.colorKeys[i].time;
+                    if (!cachedKeyTimes.Contains(k))
+                        cachedKeyTimes.Add(k);
                 }
-
-                GradientColorKey[] clrs = new GradientColorKey[cachedKeyTimes.Count];
-                GradientAlphaKey[] alphas = new GradientAlphaKey[cachedKeyTimes.Count];
-                int gradientIdx = 0;
-
-                // Pick colors of both gradients at key times and lerp them
-                foreach (float time in cachedKeyTimes)
-                {
-                    var clr = Color.Lerp(a.Evaluate(time), b.Evaluate(time), t);
-                    clrs[gradientIdx] = new GradientColorKey(clr, time);
-                    alphas[gradientIdx] = new GradientAlphaKey(clr.a, time);
-                    gradientIdx++;
-                }
-
-                var g = new Gradient();
-                g.SetKeys(clrs, alphas);
-
-                return g;
-
-#if OPTIMISATION_LISTPOOL
             }
-#endif // OPTIMISATION_LISTPOOL
+
+            if (!noAlpha)
+            {
+                for (int i = 0; i < a.alphaKeys.Length; i++)
+                {
+                    float k = a.alphaKeys[i].time;
+                    if (!cachedKeyTimes.Contains(k))
+                        cachedKeyTimes.Add(k);
+                }
+
+                for (int i = 0; i < b.alphaKeys.Length; i++)
+                {
+                    float k = b.alphaKeys[i].time;
+                    if (!cachedKeyTimes.Contains(k))
+                        cachedKeyTimes.Add(k);
+                }
+            }
+
+            GradientColorKey[] clrs = new GradientColorKey[cachedKeyTimes.Count];
+            GradientAlphaKey[] alphas = new GradientAlphaKey[cachedKeyTimes.Count];
+            int gradientIdx = 0;
+
+            // Pick colors of both gradients at key times and lerp them
+            foreach (float time in cachedKeyTimes)
+            {
+                var clr = Color.Lerp(a.Evaluate(time), b.Evaluate(time), t);
+                clrs[gradientIdx] = new GradientColorKey(clr, time);
+                alphas[gradientIdx] = new GradientAlphaKey(clr.a, time);
+                gradientIdx++;
+            }
+
+            var g = new Gradient();
+            g.SetKeys(clrs, alphas);
+
+            return g;
         }
     }
 }
