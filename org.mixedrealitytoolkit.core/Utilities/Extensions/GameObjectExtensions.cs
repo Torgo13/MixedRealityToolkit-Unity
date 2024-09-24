@@ -51,7 +51,7 @@ namespace MixedReality.Toolkit
         {
             action(root);
 #if OPTIMISATION_LISTPOOL
-            using var _ = (UnityEngine.Pool.ListPool<Transform>.Get(out var items);
+            using var _ = UnityEngine.Pool.ListPool<Transform>.Get(out var items);
             root.GetComponentsInChildren<Transform>(items);
             int count = items.Count;
 #else
