@@ -48,8 +48,12 @@ namespace MixedReality.Toolkit
         /// </remarks>
         public static T EnsureComponent<T>(this GameObject gameObject) where T : Component
         {
+#if OPTIMISATION
+            return gameObject.TryGetComponent<T>(out var foundComponent) ? foundComponent : gameObject.AddComponent<T>();
+#else
             T foundComponent = gameObject.GetComponent<T>();
             return foundComponent == null ? gameObject.AddComponent<T>() : foundComponent;
+#endif // OPTIMISATION
         }
 
         /// <summary>

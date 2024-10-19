@@ -59,6 +59,7 @@ namespace MixedReality.Toolkit
                         max = enumerator.Current;
                     }
                 }
+
                 return max;
             }
         }

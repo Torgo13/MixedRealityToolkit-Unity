@@ -10,7 +10,10 @@ namespace MixedReality.Toolkit
     /// Class that contains settings which are applied to <see cref="MixedReality.Toolkit.CameraSettingsManager">CameraSettingsManager</see>.
     /// </summary>
     [Serializable]
+#if BUGFIX
+#else
     [AddComponentMenu("MRTK/Core/Camera Settings")]
+#endif // BUGFIX
     public class CameraSettings
     {
         /// <summary>
@@ -76,7 +79,7 @@ namespace MixedReality.Toolkit
         /// The default <see cref="Color"/> to apply to <see cref="ClearColor"/> if on an opaque XR headset.
         /// </summary>
         public static readonly Color DefaultClearColorOpaque = Color.black;
-        
+
         /// <summary>
         /// The default <see cref="Color"/> to apply to <see cref="ClearColor"/> if on a transparent XR headset.
         /// </summary>
@@ -122,7 +125,7 @@ namespace MixedReality.Toolkit
         /// The default value to apply to <see cref="FarPlaneDistance"/> if on an opaque XR headset.
         /// </summary>
         public static readonly float DefaultFarPlaneDistanceOpaque = 1000f;
-        
+
         /// <summary>
         /// The default value to apply to <see cref="FarPlaneDistance"/> if on a transparent XR headset.
         /// </summary>
@@ -174,7 +177,7 @@ namespace MixedReality.Toolkit
 
         /// <summary>
         /// The default value to apply to <see cref="QualityLevel"/> if on a transparent XR headset.
-        /// </summary>        
+        /// </summary>
         public static readonly int DefaultQualityLevelTransparent = 0;  // Very Low
 
         [SerializeField]

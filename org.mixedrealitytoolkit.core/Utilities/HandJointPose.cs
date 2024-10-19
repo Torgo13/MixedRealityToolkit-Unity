@@ -11,6 +11,9 @@ namespace MixedReality.Toolkit
     /// of a <see cref="UnityEngine.Pose"/>, adding a radius value.
     /// </summary>
     public struct HandJointPose : IEqualityComparer
+#if OPTIMISATION_IEQUATABLE
+        , System.IEquatable<HandJointPose>
+#endif // OPTIMISATION_IEQUATABLE
     {
         /// <summary>
         /// Initializes a new <see cref="HandJointPose"/> struct.
@@ -164,7 +167,7 @@ namespace MixedReality.Toolkit
         /// Convert a <see cref="HandJointPose"/> to a Unity <see cref="Pose"/>.
         /// </summary>
         public static implicit operator Pose(HandJointPose pose) => pose.pose;
-        
+
         #endregion
     }
 }

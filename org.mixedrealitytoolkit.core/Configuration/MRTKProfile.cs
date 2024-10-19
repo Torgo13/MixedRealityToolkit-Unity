@@ -40,7 +40,7 @@ namespace MixedReality.Toolkit
         /// <remarks>
         /// Subsystems not on this list may still be started at a later point, manually.
         /// </remarks>
-        public List<SystemType> LoadedSubsystems 
+        public List<SystemType> LoadedSubsystems
         {
             get => loadedSubsystems;
             protected set => loadedSubsystems = value;
@@ -67,11 +67,19 @@ namespace MixedReality.Toolkit
         /// </returns>
         public bool TryGetConfigForSubsystem(SystemType subsystemType, out BaseSubsystemConfig config)
         {
+#if OPTIMISATION
+            if (subsystemConfigs.TryGetValue(subsystemType, out BaseSubsystemConfig subsystemConfig))
+            {
+                config = subsystemConfig;
+                return true;
+            }
+#else
             if (subsystemConfigs.ContainsKey(subsystemType))
             {
                 config = subsystemConfigs[subsystemType];
                 return true;
             }
+#endif // OPTIMISATION
             else
             {
                 config = null;

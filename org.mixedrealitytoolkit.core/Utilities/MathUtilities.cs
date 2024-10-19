@@ -272,7 +272,7 @@ namespace MixedReality.Toolkit
         /// <param name="planes">An array of planes to test.</param>
         /// <param name="planeMask">
         /// A mask that can be used to ignore planes in <paramref name="planes"/>.
-        /// Each bit represents a single index in <paramref name="planes"/>, where 
+        /// Each bit represents a single index in <paramref name="planes"/>, where
         /// the least significant bit is the first plane index.
         /// </param>
         /// <param name="bounds">The bounds structure to test.</param>
@@ -460,12 +460,18 @@ namespace MixedReality.Toolkit
             }
 
             // now find and count actual inliers and do least-squares to find best fit
+#if BUGFIX
+            Vector3 point = nearestPoint;
+            IEnumerable<Ray> inlierList = rays.Where(r => DistanceOfPointToLine(r, point) < ransac_threshold);
+#else
             IEnumerable<Ray> inlierList = rays.Where(r => DistanceOfPointToLine(r, nearestPoint) < ransac_threshold);
+#endif // BUGFIX
             numActualInliers = inlierList.Count();
             if (numActualInliers >= 2)
             {
                 nearestPoint = NearestPointToLinesLeastSquares(inlierList);
             }
+            
             return nearestPoint;
         }
 
@@ -587,7 +593,7 @@ namespace MixedReality.Toolkit
         /// Returns if a point lies within a frame of reference view as defined by arguments
         /// </summary>
         /// <remarks>
-        /// Field of view parameters are in degrees and plane distances are in meters 
+        /// Field of view parameters are in degrees and plane distances are in meters
         /// </remarks>
         public static bool IsInFOV(Vector3 testPosition, Transform frameOfReference,
             float verticalFOV, float horizontalFOV,

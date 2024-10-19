@@ -12,6 +12,9 @@ namespace MixedReality.Toolkit
     /// </summary>
     [Serializable]
     public struct MixedRealityTransform : IEqualityComparer
+#if OPTIMISATION_IEQUATABLE
+        , IEquatable<MixedRealityTransform>
+#endif // OPTIMISATION_IEQUATABLE
     {
         /// <summary>
         /// Initializes a new <see cref="MixedRealityTransform"/> struct.

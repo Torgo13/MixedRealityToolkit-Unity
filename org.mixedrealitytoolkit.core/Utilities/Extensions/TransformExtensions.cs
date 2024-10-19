@@ -48,7 +48,11 @@ namespace MixedReality.Toolkit
         /// <param name="root">Start point of the traversion set</param>
         public static IEnumerable<Transform> EnumerateHierarchy(this Transform root)
         {
+#if SAFETY
+            if (root == null) { throw new ArgumentNullException(nameof(root)); }
+#else
             if (root == null) { throw new ArgumentNullException("root"); }
+#endif // SAFETY
             return root.EnumerateHierarchyCore(new List<Transform>(0));
         }
 
@@ -59,11 +63,20 @@ namespace MixedReality.Toolkit
         /// <param name="ignore">Transforms and all its children to be ignored</param>
         public static IEnumerable<Transform> EnumerateHierarchy(this Transform root, ICollection<Transform> ignore)
         {
+#if SAFETY
+            if (root == null) { throw new ArgumentNullException(nameof(root)); }
+            if (ignore == null)
+            {
+                throw new ArgumentNullException(nameof(ignore), "Ignore collection can't be null, use EnumerateHierarchy(root) instead.");
+            }
+#else
             if (root == null) { throw new ArgumentNullException("root"); }
             if (ignore == null)
             {
                 throw new ArgumentNullException("ignore", "Ignore collection can't be null, use EnumerateHierarchy(root) instead.");
-            }
+            }            
+#endif // SAFETY
+
             return root.EnumerateHierarchyCore(ignore);
         }
 
@@ -96,7 +109,7 @@ namespace MixedReality.Toolkit
         /// Calculates the bounds of all the colliders attached to this GameObject and all its children
         /// </summary>
         /// <param name="transform">Transform of root GameObject the colliders are attached to </param>
-        /// <returns>The total bounds of all colliders attached to this GameObject. 
+        /// <returns>The total bounds of all colliders attached to this GameObject.
         /// If no colliders attached, returns a bounds of center and extents 0</returns>
         public static Bounds GetColliderBounds(this Transform transform)
         {

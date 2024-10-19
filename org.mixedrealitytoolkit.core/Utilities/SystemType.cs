@@ -19,12 +19,12 @@ namespace MixedReality.Toolkit
         private Type type;
 
         /// <summary>
-        /// Create a reference string from the given type's assembly qualified class name. The reference 
+        /// Create a reference string from the given type's assembly qualified class name. The reference
         /// string will contain the full name and assembly name from the given type.
         /// </summary>
         /// <param name="type">The class type to track.</param>
         /// <returns>
-        /// A new reference string. Will return an empty string if the type is null, 
+        /// A new reference string. Will return an empty string if the type is null,
         /// or if the assembly qualified name is null or empty.
         /// </returns>
         public static string GetReference(Type type)
@@ -38,7 +38,7 @@ namespace MixedReality.Toolkit
         }
 
         /// <summary>
-        /// Create a reference string from the given assembly qualified class name. The reference 
+        /// Create a reference string from the given assembly qualified class name. The reference
         /// string will contain the full name and assembly name from the given assembly qualified name.
         /// </summary>
         /// <param name="assemblyQualifiedName">Assembly qualified class name.</param>
@@ -221,7 +221,7 @@ namespace MixedReality.Toolkit
         /// Returns a string that represents this <see cref="SystemType"/>.
         /// </summary>
         /// <Returns>
-        /// The full name for the type represented by this <see cref="SystemType"/>, or 
+        /// The full name for the type represented by this <see cref="SystemType"/>, or
         /// "(None)" if the type is null.
         /// </Returns>
         public override string ToString()
@@ -247,10 +247,17 @@ namespace MixedReality.Toolkit
         /// </summary>
         private static string TryMigrateReference(string reference)
         {
+#if OPTIMISATION
+            if (ReferenceMappings.TryGetValue(reference, out string migrateReference))
+            {
+                return migrateReference;
+            }
+#else
             if (ReferenceMappings.ContainsKey(reference))
             {
                 return ReferenceMappings[reference];
             }
+#endif // OPTIMISATION
 
             return reference;
         }

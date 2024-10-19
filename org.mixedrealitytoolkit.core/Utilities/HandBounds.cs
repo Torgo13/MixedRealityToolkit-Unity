@@ -15,6 +15,7 @@ namespace MixedReality.Toolkit
     [AddComponentMenu("MRTK/Core/Hand Bounds")]
     public class HandBounds : MonoBehaviour
     {
+#if ENABLE_VR && ENABLE_XR_MODULE
         /// <summary>
         /// Accessor for the bounds associated with a handedness, calculated in global-axis-aligned space.
         /// </summary>
@@ -24,6 +25,7 @@ namespace MixedReality.Toolkit
         /// Accessor for the bounds associated with a handedness, calculated in local hand-space, locally axis aligned.
         /// </summary>
         public Dictionary<Handedness, Bounds> LocalBounds { get; private set; } = new Dictionary<Handedness, Bounds>();
+#endif // ENABLE_VR && ENABLE_XR_MODULE
 
         [SerializeField]
         [Tooltip("Should a gizmo be drawn to represent the hand bounds.")]
@@ -51,11 +53,13 @@ namespace MixedReality.Toolkit
             set => drawLocalBoundsGizmo = value;
         }
 
+#if ENABLE_VR && ENABLE_XR_MODULE
         /// <summary>
         /// Mapping between controller handedness and associated hand transforms.
         /// Used to transform the debug gizmos when rendering the hand AABBs.
         /// </summary>
         private Dictionary<Handedness, Matrix4x4> boundsTransforms = new Dictionary<Handedness, Matrix4x4>();
+#endif // ENABLE_VR && ENABLE_XR_MODULE
 
         #region MonoBehaviour Implementation
 
@@ -68,6 +72,7 @@ namespace MixedReality.Toolkit
             ComputeNewBounds(Handedness.Right);
         }
 
+#if ENABLE_VR && ENABLE_XR_MODULE
         /// <summary>
         /// A Unity event function that is called to draw Unity editor gizmos that are also interactable and always drawn.
         /// </summary>
@@ -91,6 +96,7 @@ namespace MixedReality.Toolkit
                 }
             }
         }
+#endif // ENABLE_VR && ENABLE_XR_MODULE
 
         #endregion MonoBehaviour Implementation
 
