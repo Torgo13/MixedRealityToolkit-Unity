@@ -52,7 +52,10 @@ namespace MixedReality.Toolkit
         {
             if (p2 <= p1)
             {
+#if UNITY_EDITOR || DEBUG
                 Debug.LogError("Trying to compress the gradient with an invalid range");
+#endif // UNITY_EDITOR || DEBUG
+
                 return a;
             }
 
@@ -92,12 +95,20 @@ namespace MixedReality.Toolkit
 
         private static Gradient GradientLerp(Gradient a, Gradient b, float t, bool noAlpha, bool noColor)
         {
+#if SAFETY
             if (t == 0.0f)
+#else
+            if (t <= 0.0f)
+#endif // SAFETY
             {
                 return a;
             }
 
+#if SAFETY
             if (t == 1.0f)
+#else
+            if (t >= 1.0f)
+#endif // SAFETY
             {
                 return b;
             }
