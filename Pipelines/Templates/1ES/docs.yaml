@@ -10,9 +10,6 @@ parameters:
   outputDirectory: $(Build.ArtifactStagingDirectory)/docs
 
 steps:
-
-- template: license-unity.yaml
-
 - task: PowerShell@2
   displayName: 'Update package versions'
   inputs:
@@ -49,8 +46,8 @@ steps:
       -OutputDirectoryPostfixVersion
       -CommonDependenciesDirectory
 
-- task: PublishBuildArtifacts@1
+- task: 1ES.PublishPipelineArtifact@1
   displayName: "Publish binaries for API reference docs"
   inputs:
-    targetPath: ${{ parameters.outputDirectory }}
-    artifactName: "docs-binaries"
+    path: ${{ parameters.outputDirectory }}
+    artifact: "docs-binaries"

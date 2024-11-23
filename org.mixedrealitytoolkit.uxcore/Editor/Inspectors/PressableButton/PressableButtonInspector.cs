@@ -103,7 +103,6 @@ namespace MixedReality.Toolkit.Editor
                 return;
             }
 
-            serializedObject.Update();
             currentInfo = GatherCurrentInfo();
             DrawButtonInfo(currentInfo, EditingEnabled);
         }

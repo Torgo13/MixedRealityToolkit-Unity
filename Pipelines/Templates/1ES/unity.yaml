@@ -32,18 +32,14 @@ parameters:
       - Android
 
 steps:
-  - pwsh: Install-Module PowerShellGet -Force
-    displayName: Update PowerShellGet
 
-  - pwsh: Install-Module UnitySetup -Scope CurrentUser -Force -AllowPrerelease -RequiredVersion 5.6.161-develop
-    displayName: Install unitysetup.powershell
 
-  - template: license-unity.yaml
+  - template: /Pipelines/Templates/license-unity.yaml
 
     # Standalone x64 tasks
 
   - ${{ if eq(parameters.Platform, 'Standalone') }}:
-      - template: Tasks/build-unity.yaml
+      - template: /Pipelines/Templates/Tasks/build-unity.yaml
         parameters:
           UnityVersion: ${{ parameters.UnityVersion }}
           BuildTarget: StandaloneWindows64
@@ -54,7 +50,7 @@ steps:
 
     # Run tests early, but don't bother if the standalone build failed.
   - ${{ if eq(parameters.RunTests, true) }}:
-      - template: tests.yaml
+      - template: /Pipelines/Templates/tests.yaml
         parameters:
           UnityVersion: ${{ parameters.UnityVersion }}
           BuildTarget: StandaloneWindows64
@@ -64,7 +60,7 @@ steps:
     # UWP tasks
 
   - ${{ if eq(parameters.Platform, 'UWP') }}:
-      - template: Tasks/build-unity.yaml
+      - template: /Pipelines/Templates/Tasks/build-unity.yaml
         parameters:
           UnityVersion: ${{ parameters.UnityVersion }}
           BuildTarget: WSAPlayer
@@ -78,7 +74,7 @@ steps:
           ((Get-Content -Path $manifestPath -Raw) -Replace '(<Identity[^\>]*Version=)"[0-9.]+', '$1"$(ProjectVersion).0') | Set-Content -Path $manifestPath -NoNewline
         displayName: Patch UWP AppX version
 
-      - template: Tasks/build-appx.yaml
+      - template: /Pipelines/Templates/Tasks/build-appx.yaml
         parameters:
           ProjectName: ${{ parameters.ProjectName }}
           BuildFolderPath: $(Agent.TempDirectory)/build/uwp
@@ -89,7 +85,7 @@ steps:
     # Android tasks
 
   - ${{ if eq(parameters.Platform, 'Android') }}:
-      - template: Tasks/build-unity.yaml
+      - template: /Pipelines/Templates/Tasks/build-unity.yaml
         parameters:
           UnityVersion: ${{ parameters.UnityVersion }}
           BuildTarget: Android
@@ -100,8 +96,8 @@ steps:
     # Publishing tasks
 
   - ${{ if not(eq(parameters.Platform, 'None')) }}:
-      - task: PublishPipelineArtifact@1
+      - task: 1ES.PublishPipelineArtifact@1
         displayName: Publish apps
         inputs:
-          targetPath: $(Build.ArtifactStagingDirectory)/Apps-${{ parameters.Platform }}
-          artifactName: Apps-${{ parameters.ProjectName }}-${{ parameters.Platform }}
+          path: $(Build.ArtifactStagingDirectory)/Apps-${{ parameters.Platform }}
+          artifact: Apps-${{ parameters.ProjectName }}-${{ parameters.Platform }}
