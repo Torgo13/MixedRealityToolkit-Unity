@@ -435,10 +435,18 @@ namespace MixedReality.Toolkit.UX.Experimental
         private void InitializePool()
         {
             // Support resetting everything from ResetLayout
+#if OPTIMISATION
+            foreach (var i in poolDict)
+            {
+                MakeInvisible(i.Key);
+            }
+#else
             foreach (int i in poolDict.Keys.ToArray())
             {
                 MakeInvisible(i);
             }
+#endif // OPTIMISATION
+
             poolDict.Clear();
             while (pool.Count > 0)
             {
@@ -533,7 +541,7 @@ namespace MixedReality.Toolkit.UX.Experimental
             visibleValid = false;
             Initialize();
         }
-        #endregion
+#endregion
 
         #region Public Methods
 

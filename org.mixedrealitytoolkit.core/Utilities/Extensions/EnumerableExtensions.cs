@@ -21,6 +21,12 @@ namespace MixedReality.Toolkit
         public static void DisposeElements<T>(this IEnumerable<T> items)
             where T : IDisposable
         {
+#if OPTIMISATION
+            foreach (var item in items.Where(x => x != null))
+            {
+                item.Dispose();
+            }
+#else
             T[] array = items.ToArray();
             int count = array.Length;
 
@@ -28,6 +34,7 @@ namespace MixedReality.Toolkit
             {
                 array[i]?.Dispose();
             }
+#endif // OPTIMISATION
         }
 
         /// <summary>
