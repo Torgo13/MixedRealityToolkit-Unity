@@ -620,7 +620,7 @@ namespace MixedReality.Toolkit
         public static void GetColliderBoundsPoints(GameObject target, List<Vector3> boundsPoints, LayerMask ignoreLayers, Transform relativeTo = null)
         {
 #if OPTIMISATION_LISTPOOL
-            using var _ = UnityEngine.Pool.ListPool<Collider>.Get(out var colliders);
+            using var _0 = UnityEngine.Pool.ListPool<Collider>.Get(out var colliders);
             target.GetComponentsInChildren<Collider>(colliders);
             for (int i = 0, collidersCount = colliders.Count; i < collidersCount; i++)
 #else
@@ -730,7 +730,7 @@ namespace MixedReality.Toolkit
         public static void GetRenderBoundsPoints(GameObject target, List<Vector3> boundsPoints, LayerMask ignoreLayers)
         {
 #if OPTIMISATION_LISTPOOL
-            using var _ = UnityEngine.Pool.ListPool<Renderer>.Get(out var renderers);
+            using var _0 = UnityEngine.Pool.ListPool<Renderer>.Get(out var renderers);
             target.GetComponentsInChildren<Renderer>(renderers);
             for (int i = 0, renderersCount = renderers.Count; i < renderersCount; ++i)
 #else
@@ -776,7 +776,7 @@ namespace MixedReality.Toolkit
         public static void GetMeshFilterBoundsPoints(GameObject target, List<Vector3> boundsPoints, LayerMask ignoreLayers)
         {
 #if OPTIMISATION_LISTPOOL
-            using var _ = UnityEngine.Pool.ListPool<MeshFilter>.Get(out var meshFilters);
+            using var _0 = UnityEngine.Pool.ListPool<MeshFilter>.Get(out var meshFilters);
             target.GetComponentsInChildren<MeshFilter>(meshFilters);
             for (int i = 0, meshFiltersCount = meshFilters.Count; i < meshFiltersCount; i++)
 #else
@@ -796,7 +796,7 @@ namespace MixedReality.Toolkit
             }
 
 #if OPTIMISATION_LISTPOOL
-            using var _0 = UnityEngine.Pool.ListPool<RectTransform>.Get(out var rectTransforms);
+            using var _1 = UnityEngine.Pool.ListPool<RectTransform>.Get(out var rectTransforms);
             target.GetComponentsInChildren<RectTransform>(rectTransforms);
             for (int i = 0, rectTransformsCount = rectTransforms.Count; i < rectTransformsCount; i++)
 #else

@@ -114,7 +114,7 @@ namespace MixedReality.Toolkit
             }
 
 #if OPTIMISATION_LISTPOOL
-            using var _ = UnityEngine.Pool.HashSetPool<float>.Get(out var cachedKeyTimes);
+            using var _0 = UnityEngine.Pool.HashSetPool<float>.Get(out var cachedKeyTimes);
 #else
             // List of all the unique key times
             cachedKeyTimes.Clear();

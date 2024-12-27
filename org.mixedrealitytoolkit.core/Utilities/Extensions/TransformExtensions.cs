@@ -114,7 +114,7 @@ namespace MixedReality.Toolkit
         public static Bounds GetColliderBounds(this Transform transform)
         {
 #if OPTIMISATION_LISTPOOL
-            using var _ = UnityEngine.Pool.ListPool<Collider>.Get(out var colliders);
+            using var _0 = UnityEngine.Pool.ListPool<Collider>.Get(out var colliders);
             transform.GetComponentsInChildren<Collider>(colliders);
             int collidersCount = colliders.Count;
             if (collidersCount == 0) { return new Bounds(); }

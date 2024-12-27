@@ -51,7 +51,7 @@ namespace MixedReality.Toolkit
         {
             action(root);
 #if OPTIMISATION_LISTPOOL
-            using var _ = UnityEngine.Pool.ListPool<Transform>.Get(out var items);
+            using var _0 = UnityEngine.Pool.ListPool<Transform>.Get(out var items);
             root.GetComponentsInChildren<Transform>(items);
             int count = items.Count;
 #else
@@ -85,7 +85,7 @@ namespace MixedReality.Toolkit
         public static void ForEachComponent<T>(this GameObject gameObject, Action<T> action) where T : Component
         {
 #if OPTIMISATION_LISTPOOL
-            using var _ = UnityEngine.Pool.ListPool<T>.Get(out var components);
+            using var _0 = UnityEngine.Pool.ListPool<T>.Get(out var components);
             gameObject.GetComponents<T>(components);
             int count = components.Count;
 #else
@@ -113,7 +113,7 @@ namespace MixedReality.Toolkit
 
 #if UNITY_EDITOR
 #if OPTIMISATION_LISTPOOL
-            using var _ = UnityEngine.Pool.ListPool<MonoBehaviour>.Get(out var monoBehaviours);
+            using var _0 = UnityEngine.Pool.ListPool<MonoBehaviour>.Get(out var monoBehaviours);
             gameObject.GetComponents<MonoBehaviour>(monoBehaviours);
             int count = monoBehaviours.Count;
 #else

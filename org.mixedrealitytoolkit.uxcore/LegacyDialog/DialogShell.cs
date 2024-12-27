@@ -100,7 +100,7 @@ namespace MixedReality.Toolkit.UX.Deprecated
             {
                 if (child.name == "ButtonParent")
                 {
-                    using var _ = UnityEngine.Pool.ListPool<DialogButton>.Get(out var buttons);
+                    using var _0 = UnityEngine.Pool.ListPool<DialogButton>.Get(out var buttons);
                     child.GetComponentsInChildren<DialogButton>(buttons);
                     if (buttons != null)
                     {
@@ -119,7 +119,7 @@ namespace MixedReality.Toolkit.UX.Deprecated
                 if (child.name == "ButtonParent")
                 {
 #if OPTIMISATION_LISTPOOL
-                    using var _ = UnityEngine.Pool.ListPool<DialogButton>.Get(out var buttons);
+                    using var _0 = UnityEngine.Pool.ListPool<DialogButton>.Get(out var buttons);
                     child.GetComponentsInChildren<DialogButton>(buttons);
 #else
                     DialogButton[] buttons = child.GetComponentsInChildren<DialogButton>();
