@@ -14,7 +14,7 @@ namespace MixedReality.Toolkit.Speech.Windows
     /// <summary>
     /// A Unity subsystem that extends <see cref="MixedReality.Toolkit.Subsystems.DictationSubsystem">DictationSubsystem</see>
     /// so to expose the dictation services available on Windows platforms. This subsystem is enabled for Windows Standalone and
-    /// Universal Windows Applications. 
+    /// Universal Windows Applications.
     /// </summary>
     /// <remarks>
     /// This subsystem can be configured using the <see cref="MixedReality.Toolkit.Speech.Windows.WindowsDictationSubsystemConfig">WindowsDictationSubsystemConfig</see> Unity asset.
@@ -118,8 +118,8 @@ namespace MixedReality.Toolkit.Speech.Windows
             }
 
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_WSA
-            /// <inheritdoc/>
 #if ENABLE_VR && ENABLE_XR_MODULE
+            /// <inheritdoc/>
             public override void Start()
 #else
             public void Start()
@@ -147,8 +147,8 @@ namespace MixedReality.Toolkit.Speech.Windows
             }
 #endif
 
-            /// <inheritdoc/>
 #if ENABLE_VR && ENABLE_XR_MODULE
+            /// <inheritdoc/>
             public override void Destroy()
 #else
             public void Destroy()
@@ -194,8 +194,8 @@ namespace MixedReality.Toolkit.Speech.Windows
 
             #region IDictationSubsystem implementation
 
-            /// <inheritdoc/>
 #if ENABLE_VR && ENABLE_XR_MODULE
+            /// <inheritdoc/>
             public override void StartDictation()
 #else
             public void StartDictation()
@@ -208,8 +208,8 @@ namespace MixedReality.Toolkit.Speech.Windows
 #endif
             }
 
-            /// <inheritdoc/>
 #if ENABLE_VR && ENABLE_XR_MODULE
+            /// <inheritdoc/>
             public override void StopDictation()
 #else
             public void StopDictation()

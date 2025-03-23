@@ -20,7 +20,7 @@ namespace MixedReality.Toolkit.Speech.Windows
     /// <summary>
     /// A Unity subsystem that extends <see cref="MixedReality.Toolkit.Subsystems.TextToSpeechSubsystem">TextToSpeechSubsystem</see>
     /// so to expose the text to speech services available on Windows platforms. This subsystem is enabled for Windows Standalone and
-    /// Universal Windows Applications. 
+    /// Universal Windows Applications.
     /// </summary>
     /// <remarks>
     /// This subsystem can be configured using the <see cref="MixedReality.Toolkit.Speech.Windows.WindowsKeywordRecognitionSubsystemConfig">WindowsKeywordRecognitionSubsystemConfig</see> Unity asset.
@@ -99,8 +99,8 @@ namespace MixedReality.Toolkit.Speech.Windows
             private bool haveLogged = false;
 #endif
 
-            /// <inheritdoc/>
 #if ENABLE_VR && ENABLE_XR_MODULE
+            /// <inheritdoc/>
             public override async Task<bool> TrySpeak(string phrase, AudioSource audioSource)
 #else
             public async Task<bool> TrySpeak(string phrase, AudioSource audioSource)
@@ -138,7 +138,7 @@ namespace MixedReality.Toolkit.Speech.Windows
                     sampleRate);
 
                 audioSource.Play();
-                
+
                 return true;
             }
 

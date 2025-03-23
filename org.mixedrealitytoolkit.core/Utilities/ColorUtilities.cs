@@ -52,9 +52,9 @@ namespace MixedReality.Toolkit
         {
             if (p2 <= p1)
             {
-#if UNITY_EDITOR || DEBUG
+#if DEBUG
                 Debug.LogError("Trying to compress the gradient with an invalid range");
-#endif // UNITY_EDITOR || DEBUG
+#endif // DEBUG
 
                 return a;
             }

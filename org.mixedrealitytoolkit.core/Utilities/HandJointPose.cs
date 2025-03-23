@@ -140,7 +140,11 @@ namespace MixedReality.Toolkit
         /// <inheritdoc />
         public override int GetHashCode()
         {
+#if OPTIMISATION
+            return System.HashCode.Combine(pose, radius);
+#else
             return base.GetHashCode();
+#endif // OPTIMISATION
         }
 
         /// <summary>

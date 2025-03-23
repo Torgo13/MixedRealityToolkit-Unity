@@ -68,7 +68,7 @@ namespace MixedReality.Toolkit.Audio
         /// </remarks>
         public float UpdateInterval
         {
-            get 
+            get
             {
                  return updateInterval;
             }
@@ -93,9 +93,9 @@ namespace MixedReality.Toolkit.Audio
         /// </remarks>
         public float MaxDistance
         {
-            get 
+            get
             {
-                 return maxDistance; 
+                 return maxDistance;
             }
 
             set
@@ -107,7 +107,7 @@ namespace MixedReality.Toolkit.Audio
         /// <summary>
         /// Maximum number of objects that will be considered when looking for an influencer.
         /// </summary>
-        /// <remarks> 
+        /// <remarks>
         /// <para>
         /// Setting this value too high may have a negative impact on the performance of your
         /// experience.
@@ -122,7 +122,7 @@ namespace MixedReality.Toolkit.Audio
         private int maxObjects = 10;
 
         /// <summary>
-        /// Time of last audio processing update. 
+        /// Time of last audio processing update.
         /// </summary>
         private DateTime lastUpdate = DateTime.MinValue;
 
@@ -170,6 +170,10 @@ namespace MixedReality.Toolkit.Audio
 
         private float nextUpdate = 0f;
 
+#if OPTIMISATION
+        Transform _cameraTransform;
+#endif // OPTIMISATION
+
         /// <summary>
         /// A Unity event function that is called when an enabled script instance is being loaded.
         /// </summary>
@@ -182,7 +186,7 @@ namespace MixedReality.Toolkit.Audio
 
             initialAudioSourceVolume = audioSource.volume;
 
-            // Get initial values that the sound designer / developer 
+            // Get initial values that the sound designer / developer
             // may have applied to this game object
             AudioLowPassFilter lowPassFilter = gameObject.GetComponent<AudioLowPassFilter>();
             nativeLowPassCutoffFrequency = (lowPassFilter != null) ? lowPassFilter.cutoffFrequency : NeutralHighFrequency;
@@ -264,6 +268,28 @@ namespace MixedReality.Toolkit.Audio
         /// </summary>
         private void UpdateActiveInfluencerCollection()
         {
+#if OPTIMISATION
+            if (_cameraTransform == null)
+            {
+                var mainCamera = Camera.main;
+                if (mainCamera != null)
+                {
+                    _cameraTransform = mainCamera.transform;
+                    if (_cameraTransform == null)
+                        return;
+                }
+            }
+
+            var position = gameObject.transform.position;
+            var cameraPosition = _cameraTransform.position;
+
+            // Influencers take effect only when between the emitter and the user.
+            // Perform a raycast from the user toward the object.
+            Vector3 direction = (position - cameraPosition).normalized;
+            float distance = Vector3.Distance(cameraPosition, position);
+
+            int count = UnityPhysics.RaycastNonAlloc(cameraPosition,
+#else
             Transform cameraTransform = Camera.main.transform;
 
             // Influencers take effect only when between the emitter and the user.
@@ -272,6 +298,7 @@ namespace MixedReality.Toolkit.Audio
             float distance = Vector3.Distance(cameraTransform.position, gameObject.transform.position);
 
             int count = UnityPhysics.RaycastNonAlloc(cameraTransform.position,
+#endif // OPTIMISATION
                                                 direction,
                                                 hits,
                                                 distance,
@@ -280,7 +307,11 @@ namespace MixedReality.Toolkit.Audio
 
             for (int i = 0; i < count; i++)
             {
+#if OPTIMISATION
+                IAudioInfluencer influencer = hits[i].collider.GetComponentInParent<IAudioInfluencer>();
+#else
                 IAudioInfluencer influencer = hits[i].collider.gameObject.GetComponentInParent<IAudioInfluencer>();
+#endif // OPTIMISATION
                 if (influencer != null)
                 {
                     effectsToApply.Add(influencer);

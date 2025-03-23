@@ -169,7 +169,7 @@ namespace MixedReality.Toolkit
                 return handsAggregator;
             }
         }
-        
+
         private static IDictationSubsystem dictationSubsystem = null;
 
         /// <summary>
@@ -305,7 +305,7 @@ namespace MixedReality.Toolkit
         /// <returns>
         /// <see langword="true"/> if all validation checks pass.
         /// </returns>
-        /// <exception cref="ArgumentException">Thrown when there are errors in the descriptor parameters.
+        /// <exception cref="System.ArgumentException">Thrown when there are errors in the descriptor parameters.
         /// Typically, this will occur in the following cases:
         /// <list type="bullet">
         ///     <item>

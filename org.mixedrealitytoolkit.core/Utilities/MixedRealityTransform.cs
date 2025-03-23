@@ -167,7 +167,11 @@ namespace MixedReality.Toolkit
         /// <inheritdoc />
         public override int GetHashCode()
         {
+#if OPTIMISATION
+            return HashCode.Combine(pose, scale);
+#else
             return base.GetHashCode();
+#endif
         }
 
         #endregion IEqualityComparer Implementation
