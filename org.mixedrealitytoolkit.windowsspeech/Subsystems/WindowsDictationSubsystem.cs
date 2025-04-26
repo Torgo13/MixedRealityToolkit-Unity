@@ -7,7 +7,7 @@ using UnityEngine.Scripting;
 
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_WSA
 using UnityEngine.Windows.Speech;
-#endif // UNITY_STANDALONE_WIN || UNITY_WSA || UNITY_EDITOR_WIN
+#endif // UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_WSA
 
 namespace MixedReality.Toolkit.Speech.Windows
 {
@@ -38,10 +38,14 @@ namespace MixedReality.Toolkit.Speech.Windows
             // Fetch subsystem metadata from the attribute.
             var cinfo = XRSubsystemHelpers.ConstructCinfo<WindowsDictationSubsystem, DictationSubsystemCinfo>();
 
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_WSA
             if (!Register(cinfo))
             {
                 Debug.LogError($"Failed to register the {cinfo.Name} subsystem.");
             }
+#else
+            Debug.Log($"Skipping registration of the {cinfo.Name} subsystem due to running on an unsupported platform.");
+#endif
         }
 #endif // ENABLE_VR && ENABLE_XR_MODULE
 

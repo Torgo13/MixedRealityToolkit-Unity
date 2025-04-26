@@ -3,8 +3,6 @@
 
 #if ENABLE_VR && ENABLE_XR_MODULE
 
-using UnityEngine;
-
 namespace MixedReality.Toolkit.Input
 {
     public class ProximityEnteredEventArgs : BaseProximityEventArgs
@@ -15,7 +13,7 @@ namespace MixedReality.Toolkit.Input
         /// <param name="nearInteractionModeDetector">NearInteractionModeDetector that triggers proximity entered event.</param>
         public ProximityEnteredEventArgs(NearInteractionModeDetector nearInteractionModeDetector) : base(nearInteractionModeDetector)
         {
-            //Empty on purpose
+            // Empty on purpose
         }
     }
 }
