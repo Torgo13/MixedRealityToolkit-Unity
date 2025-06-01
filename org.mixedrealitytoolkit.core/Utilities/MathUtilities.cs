@@ -460,6 +460,19 @@ namespace MixedReality.Toolkit
             }
 
             // now find and count actual inliers and do least-squares to find best fit
+#if OPTIMISATION_LISTPOOL
+            using var _0 = UnityEngine.Pool.ListPool<Ray>.Get(out var inlierList);
+            if (inlierList.Capacity < rays.Count)
+                inlierList.Capacity = rays.Count;
+
+            foreach (var r in rays)
+            {
+                if (DistanceOfPointToLine(r, nearestPoint) < ransac_threshold)
+                    inlierList.Add(r);
+            }
+
+            numActualInliers = inlierList.Count;
+#else
 #if BUGFIX
             Vector3 point = nearestPoint;
             IEnumerable<Ray> inlierList = rays.Where(r => DistanceOfPointToLine(r, point) < ransac_threshold);
@@ -467,6 +480,8 @@ namespace MixedReality.Toolkit
             IEnumerable<Ray> inlierList = rays.Where(r => DistanceOfPointToLine(r, nearestPoint) < ransac_threshold);
 #endif // BUGFIX
             numActualInliers = inlierList.Count();
+#endif // OPTIMISATION_LISTPOOL
+
             if (numActualInliers >= 2)
             {
                 nearestPoint = NearestPointToLinesLeastSquares(inlierList);

@@ -15,6 +15,10 @@ using System.Reflection;
 using System.Linq;
 using UnityEditor.SceneManagement;
 
+#if OPTIMISATION
+using Debug = UnityEngine.Debug;
+#endif // OPTIMISATION
+
 namespace MixedReality.Toolkit.Editor
 {
     /// <summary>

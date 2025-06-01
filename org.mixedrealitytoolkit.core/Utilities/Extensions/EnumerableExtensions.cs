@@ -21,10 +21,14 @@ namespace MixedReality.Toolkit
         public static void DisposeElements<T>(this IEnumerable<T> items)
             where T : IDisposable
         {
-#if OPTIMISATION
-            foreach (var item in items.Where(x => x != null))
+#if OPTIMISATION_LISTPOOL
+            using var _0 = UnityEngine.Pool.ListPool<T>.Get(out var list);
+            list.AddRange(items);
+            int count = list.Count;
+
+            for (int i = 0; i < count; i++)
             {
-                item.Dispose();
+                list[i]?.Dispose();
             }
 #else
             T[] array = items.ToArray();
@@ -34,7 +38,7 @@ namespace MixedReality.Toolkit
             {
                 array[i]?.Dispose();
             }
-#endif // OPTIMISATION
+#endif // OPTIMISATION_LISTPOOL
         }
 
         /// <summary>
@@ -79,7 +83,13 @@ namespace MixedReality.Toolkit
         /// <returns>The new, read-only copy of <paramref name="items"/>.</returns>
         public static ReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> items)
         {
+#if OPTIMISATION_LISTPOOL
+            using var _0 = UnityEngine.Pool.ListPool<T>.Get(out var list);
+            list.AddRange(items);
+            return Array.AsReadOnly<T>(list.ToArray());
+#else
             return Array.AsReadOnly<T>(items.ToArray());
+#endif // OPTIMISATION_LISTPOOL
         }
     }
 }
