@@ -255,6 +255,9 @@ namespace MixedReality.Toolkit.Speech.Windows
             /// This event is fired while the user is talking. As the recognizer listens, it provides text of what it's heard so far.
             /// </summary>
             /// <param name="text">The currently hypothesized recognition.</param>
+#if OPTIMISATION_STATIC
+            static
+#endif // OPTIMISATION_STATIC
             private void DictationRecognizer_DictationHypothesis(string text)
             {
                 DictationResultEventArgs eventArgs = new DictationResultEventArgs(text, null);
@@ -295,6 +298,9 @@ namespace MixedReality.Toolkit.Speech.Windows
             /// </summary>
             /// <param name="error">The string representation of the error reason.</param>
             /// <param name="hresult">The int representation of the hresult.</param>
+#if OPTIMISATION_STATIC
+            static
+#endif // OPTIMISATION_STATIC
             private void DictationRecognizer_DictationError(string error, int hresult)
             {
                 DictationSessionEventArgs eventArgs = new DictationSessionEventArgs(DictationEventReason.UnknownFailure,
@@ -303,7 +309,10 @@ namespace MixedReality.Toolkit.Speech.Windows
                 OnRecognitionFaulted(eventArgs);
 #endif // ENABLE_VR && ENABLE_XR_MODULE
             }
-
+        
+#if OPTIMISATION_STATIC
+            static
+#endif // OPTIMISATION_STATIC
             private float ConfidenceLevelToFloat(ConfidenceLevel level)
             {
                 return level switch
@@ -315,7 +324,10 @@ namespace MixedReality.Toolkit.Speech.Windows
                     _ => 0,
                 };
             }
-
+        
+#if OPTIMISATION_STATIC
+            static
+#endif // OPTIMISATION_STATIC
             private DictationEventReason ToDictationEventReason(DictationCompletionCause cause)
             {
                 return cause switch

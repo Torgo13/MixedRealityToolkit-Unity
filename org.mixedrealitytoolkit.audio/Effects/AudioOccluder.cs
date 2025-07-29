@@ -7,12 +7,12 @@ namespace MixedReality.Toolkit.Audio
 {
     /// <summary>
     /// Class that implements <see cref="MixedReality.Toolkit.Audio.IAudioInfluencer"/>
-    /// to provide an audio occlusion effect, similar to listening to sound from outside of an
+    /// to provide an audio occlusion effect, similar to listening to sound from outside an
     /// enclosed space.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// Ensure that all sound emitting objects have an attached <see cref="AudioInfluencerController"/>. 
+    /// Ensure that all sound emitting objects have an attached <see cref="AudioInfluencerController"/>.
     /// Failing to do so will result in the desired effect not being applied to the sound.
     /// </para>
     /// </remarks>
@@ -67,7 +67,11 @@ namespace MixedReality.Toolkit.Audio
             get { return volumePassThrough; }
             set
             {
+#if BUGFIX
+                volumePassThrough = Mathf.Clamp(value, 0.0f, 1.0f);
+#else
                 cutoffFrequency = Mathf.Clamp(value, 0.0f, 1.0f);
+#endif // BUGFIX
             }
         }
 
@@ -87,7 +91,7 @@ namespace MixedReality.Toolkit.Audio
             AudioLowPassFilter lowPass = soundEmittingObject.EnsureComponent<AudioLowPassFilter>();
             lowPass.enabled = true;
 
-            // In the real world, chaining multiple low-pass filters will result in the 
+            // In the real world, chaining multiple low-pass filters will result in the
             // lowest of the cutoff frequencies being the highest pitches heard.
             lowPass.cutoffFrequency = Mathf.Min(lowPass.cutoffFrequency, CutoffFrequency);
 

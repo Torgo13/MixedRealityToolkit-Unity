@@ -373,6 +373,10 @@ namespace MixedReality.Toolkit.UX
             return lineInfo.lastCharacterIndex <= prevChar.index;
         }
 
+#if OPTIMISATION
+        readonly WaitForSeconds blinkTime = new WaitForSeconds(0.53f);
+#endif // OPTIMISATION
+
         /// <summary>
         /// Continuously blink the caret game object until it is destroyed.
         /// </summary>
@@ -380,11 +384,20 @@ namespace MixedReality.Toolkit.UX
         {
             while (previewCaret != null)
             {
+#if OPTIMISATION_UNITY
+                var go = previewCaret.gameObject;
+                go.SetActive(!go.activeSelf);
+#else
                 previewCaret.gameObject.SetActive(!previewCaret.gameObject.activeSelf);
+#endif // OPTIMISATION_UNITY
 
+#if OPTIMISATION
+                yield return blinkTime;
+#else
                 // The default Window's text caret blinks every 530 milliseconds.
                 const float blinkTime = 0.53f;
                 yield return new WaitForSeconds(blinkTime);
+#endif // OPTIMISATION
             }
         }
 

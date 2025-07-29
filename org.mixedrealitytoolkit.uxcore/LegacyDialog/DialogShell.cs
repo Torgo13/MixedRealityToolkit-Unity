@@ -93,24 +93,6 @@ namespace MixedReality.Toolkit.UX.Deprecated
             }
         }
 
-#if OPTIMISATION_LISTPOOL
-        private void GetAllDialogButtons(ref List<DialogButton> buttonsOnDialog)
-        {
-            foreach (Transform child in transform)
-            {
-                if (child.name == "ButtonParent")
-                {
-                    using var _0 = UnityEngine.Pool.ListPool<DialogButton>.Get(out var buttons);
-                    child.GetComponentsInChildren<DialogButton>(buttons);
-                    if (buttons != null)
-                    {
-                        buttonsOnDialog.AddRange(buttons);
-                    }
-                }
-            }
-        }
-#endif // OPTIMISATION_LISTPOOL
-
         private List<DialogButton> GetAllDialogButtons()
         {
             List<DialogButton> buttonsOnDialog = new List<DialogButton>();
@@ -118,12 +100,7 @@ namespace MixedReality.Toolkit.UX.Deprecated
             {
                 if (child.name == "ButtonParent")
                 {
-#if OPTIMISATION_LISTPOOL
-                    using var _0 = UnityEngine.Pool.ListPool<DialogButton>.Get(out var buttons);
-                    child.GetComponentsInChildren<DialogButton>(buttons);
-#else
                     DialogButton[] buttons = child.GetComponentsInChildren<DialogButton>();
-#endif // OPTIMISATION_LISTPOOL
                     if (buttons != null)
                     {
                         buttonsOnDialog.AddRange(buttons);

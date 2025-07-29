@@ -155,6 +155,9 @@ namespace MixedReality.Toolkit.UX
 
         // Checks the MonoBehaviour-specific null check, which
         // asks Unity whether the object is actually destroyed.
+#if OPTIMISATION_STATIC
+        static
+#endif // OPTIMISATION_STATIC
         private bool IsDialogDestroyed(IDialog dialog)
         {
             if (dialog is MonoBehaviour dialogBehaviour)

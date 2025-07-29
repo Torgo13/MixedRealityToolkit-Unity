@@ -33,7 +33,11 @@ namespace MixedReality.Toolkit.Audio
         /// This frequency can be used to set a high pass filter to allow all
         /// human audible frequencies through the filter.
         /// </remarks>
+#if OPTIMISATION_IL2CPP
+        public const float NeutralLowFrequency = 10.0f;
+#else
         public static readonly float NeutralLowFrequency = 10.0f;
+#endif // OPTIMISATION_IL2CPP
 
         /// <summary>
         /// Frequency above the nominal range of human hearing.
@@ -42,7 +46,11 @@ namespace MixedReality.Toolkit.Audio
         /// This frequency can be used to set a low pass filter to allow all
         /// human audible frequencies through the filter.
         /// </remarks>
+#if OPTIMISATION_IL2CPP
+        public const float NeutralHighFrequency = 22000.0f;
+#else
         public static readonly float NeutralHighFrequency = 22000.0f;
+#endif // OPTIMISATION_IL2CPP
 
         /// <summary>
         /// The source of the audio.

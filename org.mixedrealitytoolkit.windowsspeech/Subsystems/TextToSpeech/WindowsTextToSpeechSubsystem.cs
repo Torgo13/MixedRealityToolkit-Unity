@@ -93,9 +93,12 @@ namespace MixedReality.Toolkit.Speech.Windows
             }
 #endif // ENABLE_VR && ENABLE_XR_MODULE
 
-            #region ITextToSpeechSubsystem implementation
+#region ITextToSpeechSubsystem implementation
 
 #if !(WINDOWS_UWP || UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN)
+#if OPTIMISATION_STATIC // Must make haveLogged static to work outside of Windows
+            static
+#endif // OPTIMISATION_STATIC
             private bool haveLogged = false;
 #endif
 
@@ -103,6 +106,9 @@ namespace MixedReality.Toolkit.Speech.Windows
             /// <inheritdoc/>
             public override async Task<bool> TrySpeak(string phrase, AudioSource audioSource)
 #else
+#if OPTIMISATION_STATIC
+            static
+#endif // OPTIMISATION_STATIC
             public async Task<bool> TrySpeak(string phrase, AudioSource audioSource)
 #endif // ENABLE_VR && ENABLE_XR_MODULE
             {
@@ -147,6 +153,9 @@ namespace MixedReality.Toolkit.Speech.Windows
             /// </summary>
             /// <param name="phrase">The phrase to be synthesized.</param>
             /// <returns>The audio (wave) data upon successful synthesis, or null.</returns>
+#if OPTIMISATION_STATIC
+            static
+#endif // OPTIMISATION_STATIC
             private async Task<byte[]> Synthesize(string phrase)
             {
                 if (string.IsNullOrWhiteSpace(phrase))
@@ -221,7 +230,7 @@ namespace MixedReality.Toolkit.Speech.Windows
                     return waveData;
                 });
 #else
-                        if (!haveLogged)
+                if (!haveLogged)
                 {
                     Debug.LogError("The Windows Text-To-Speech subsystem is not supported on the current platform.");
                     haveLogged = true;
