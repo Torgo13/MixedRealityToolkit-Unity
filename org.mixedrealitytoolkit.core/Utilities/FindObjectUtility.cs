@@ -22,9 +22,9 @@ namespace MixedReality.Toolkit
         public static T FindFirstObjectByType<T>(bool includeInactive = false) where T : Component
         {
 #if UNITY_2021_3_18_OR_NEWER
-        return UnityEngine.Object.FindFirstObjectByType<T>(includeInactive ? FindObjectsInactive.Include : FindObjectsInactive.Exclude);
+            return UnityEngine.Object.FindFirstObjectByType<T>(includeInactive ? FindObjectsInactive.Include : FindObjectsInactive.Exclude);
 #else
-        return UnityEngine.Object.FindObjectOfType<T>(includeInactive);
+            return UnityEngine.Object.FindObjectOfType<T>(includeInactive);
 #endif
         }
 
@@ -38,9 +38,9 @@ namespace MixedReality.Toolkit
         public static T FindAnyObjectByType<T>(bool includeInactive = false) where T : Component
         {
 #if UNITY_2021_3_18_OR_NEWER
-        return UnityEngine.Object.FindAnyObjectByType<T>(includeInactive ? FindObjectsInactive.Include : FindObjectsInactive.Exclude);
+            return UnityEngine.Object.FindAnyObjectByType<T>(includeInactive ? FindObjectsInactive.Include : FindObjectsInactive.Exclude);
 #else
-        return UnityEngine.Object.FindObjectOfType<T>(includeInactive);
+            return UnityEngine.Object.FindObjectOfType<T>(includeInactive);
 #endif
         }
 
@@ -55,7 +55,7 @@ namespace MixedReality.Toolkit
         public static T[] FindObjectsByType<T>(bool includeInactive = false, bool sort = true) where T : Component
         {
 #if UNITY_2021_3_18_OR_NEWER
-        return UnityEngine.Object.FindObjectsByType<T>(includeInactive ? FindObjectsInactive.Include : FindObjectsInactive.Exclude, sort ? FindObjectsSortMode.InstanceID : FindObjectsSortMode.None);
+            return UnityEngine.Object.FindObjectsByType<T>(includeInactive ? FindObjectsInactive.Include : FindObjectsInactive.Exclude, sort ? FindObjectsSortMode.InstanceID : FindObjectsSortMode.None);
 #else
             return UnityEngine.Object.FindObjectsOfType<T>(includeInactive);
 #endif

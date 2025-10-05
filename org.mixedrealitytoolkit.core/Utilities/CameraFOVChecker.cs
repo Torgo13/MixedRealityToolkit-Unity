@@ -22,11 +22,14 @@ namespace MixedReality.Toolkit
         /// </remarks>
         private static readonly Dictionary<(Collider, Camera), bool> inFOVColliderCache = new Dictionary<(Collider, Camera), bool>();
 
+#if OPTIMISATION_LISTPOOL
+#else
         /// <summary>
         /// List of corners shared across all sphere pointer query instances -- used to store list of corners for
         /// a bounds. Shared and static to avoid allocating memory each frame
         /// </summary>
         private static readonly List<Vector3> inFOVBoundsCornerPoints = new List<Vector3>();
+#endif // OPTIMISATION_LISTPOOL
 
         /// <summary>
         /// Test if a collider's bounds is within the camera's field of view.
@@ -68,7 +71,11 @@ namespace MixedReality.Toolkit
                 return result;
             }
 
+#if OPTIMISATION_LISTPOOL
+            using var _0 = UnityEngine.Pool.ListPool<Vector3>.Get(out var inFOVBoundsCornerPoints);
+#else
             inFOVBoundsCornerPoints.Clear();
+#endif // OPTIMISATION_LISTPOOL
             BoundsExtensions.GetColliderBoundsPoints(myCollider, inFOVBoundsCornerPoints, 0);
 
             float xMin = float.MaxValue, yMin = float.MaxValue, zMin = float.MaxValue;

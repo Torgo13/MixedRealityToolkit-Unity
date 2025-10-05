@@ -86,7 +86,7 @@ namespace MixedReality.Toolkit
 #if OPTIMISATION_LISTPOOL
             using var _0 = UnityEngine.Pool.ListPool<T>.Get(out var list);
             list.AddRange(items);
-            return Array.AsReadOnly<T>(list.ToArray());
+            return new ReadOnlyCollection<T>(list);
 #else
             return Array.AsReadOnly<T>(items.ToArray());
 #endif // OPTIMISATION_LISTPOOL
