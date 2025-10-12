@@ -368,9 +368,7 @@ namespace MixedReality.Toolkit.UX.Experimental
             // Reset the keyboard layout for next use
             lastKeyboardLayout = LayoutType.Alpha;
             Clear();
-#if ENABLE_VR && ENABLE_XR_MODULE
             StopDictation();
-#endif // ENABLE_VR && ENABLE_XR_MODULE
         }
 
         /// <summary>
@@ -503,11 +501,9 @@ namespace MixedReality.Toolkit.UX.Experimental
                     Backspace();
                     break;
 
-#if ENABLE_VR && ENABLE_XR_MODULE
                 case Function.Dictate:
                     ToggleDictation();
                     break;
-#endif // ENABLE_VR && ENABLE_XR_MODULE
 
                 case Function.Undefined:
                 default:
@@ -619,10 +615,10 @@ namespace MixedReality.Toolkit.UX.Experimental
             }
         }
 
-#if ENABLE_VR && ENABLE_XR_MODULE
         /// <summary>
         /// Toggle dictation on or off,
         /// </summary>
+        [System.Diagnostics.Conditional("ENABLE_VR"), System.Diagnostics.Conditional("ENABLE_XR_MODULE")]
         public void ToggleDictation()
         {
             if (isRecording)
@@ -638,8 +634,10 @@ namespace MixedReality.Toolkit.UX.Experimental
         /// <summary>
         /// Start dictation on a DictationSubsystem.
         /// </summary>
+        [System.Diagnostics.Conditional("ENABLE_VR"), System.Diagnostics.Conditional("ENABLE_XR_MODULE")]
         public void StartDictation()
         {
+#if ENABLE_VR && ENABLE_XR_MODULE
             var dictationSubsystem = XRSubsystemHelpers.DictationSubsystem;
             if (dictationSubsystem != null && !isRecording)
             {
@@ -658,29 +656,30 @@ namespace MixedReality.Toolkit.UX.Experimental
                 dictationSubsystem.RecognitionFaulted += OnDictationFaulted;
                 dictationSubsystem.StartDictation();
             }
+#endif // ENABLE_VR && ENABLE_XR_MODULE
         }
 
         /// <summary>
         /// Stop dictation on the current DictationSubsystem.
         /// </summary>
+        [System.Diagnostics.Conditional("ENABLE_VR"), System.Diagnostics.Conditional("ENABLE_XR_MODULE")]
         public void StopDictation()
         {
+#if ENABLE_VR && ENABLE_XR_MODULE
             var dictationSubsystem = XRSubsystemHelpers.DictationSubsystem;
             if (dictationSubsystem != null)
             {
                 dictationSubsystem.StopDictation();
             }
-        }
 #endif // ENABLE_VR && ENABLE_XR_MODULE
+        }
 
         /// <summary>
         /// Close the keyboard.
         /// </summary>
         public void Close()
         {
-#if ENABLE_VR && ENABLE_XR_MODULE
             StopDictation();
-#endif // ENABLE_VR && ENABLE_XR_MODULE
             OnClose.Invoke(Text);
             gameObject.SetActive(false);
         }
@@ -903,6 +902,7 @@ namespace MixedReality.Toolkit.UX.Experimental
         /// <summary>
         /// Release references to dictation events
         /// </summary>
+        [System.Diagnostics.Conditional("ENABLE_VR"), System.Diagnostics.Conditional("ENABLE_XR_MODULE")]
         private void HandleDictationShutdown()
         {
 #if ENABLE_VR && ENABLE_XR_MODULE

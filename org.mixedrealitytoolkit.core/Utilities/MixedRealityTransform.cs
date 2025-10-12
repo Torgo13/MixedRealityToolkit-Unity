@@ -171,7 +171,7 @@ namespace MixedReality.Toolkit
             return HashCode.Combine(pose, scale);
 #else
             return base.GetHashCode();
-#endif
+#endif // OPTIMISATION
         }
 
         #endregion IEqualityComparer Implementation

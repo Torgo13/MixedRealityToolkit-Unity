@@ -104,6 +104,7 @@ namespace MixedReality.Toolkit
         /// Fetches the hand joints from the hands aggregator subsystem and computes a local and global bounds.
         /// Currently requires hand joints, and will not work with motion controllers.
         /// </summary>
+        [System.Diagnostics.Conditional("ENABLE_VR"), System.Diagnostics.Conditional("ENABLE_XR_MODULE")]
         private void ComputeNewBounds(Handedness hand)
         {
 #if ENABLE_VR && ENABLE_XR_MODULE
@@ -134,8 +135,6 @@ namespace MixedReality.Toolkit
                 // may be emitted from the palm-pose and they must be renormalized.
                 boundsTransforms[hand] = Matrix4x4.TRS(palmPose.Position, palmPose.Rotation.normalized, Vector3.one);
             }
-#else
-            return;
 #endif // ENABLE_VR && ENABLE_XR_MODULE
         }
     }

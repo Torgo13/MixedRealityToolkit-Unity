@@ -56,6 +56,7 @@ namespace MixedReality.Toolkit.UX.Experimental
                 {
                     KeyButton = GetComponent<Button>();
                 }
+
                 if (KeyButton != null)
                 {
                     KeyButton.onClick.AddListener(FireKey);
@@ -74,15 +75,12 @@ namespace MixedReality.Toolkit.UX.Experimental
                 Interactable.OnClicked.RemoveListener(FireKey);
             }
             else if (KeyButton != null)
-            {
-                KeyButton.onClick.RemoveListener(FireKey);
-            }
 #else
             if (KeyButton != null)
+#endif // ENABLE_VR && ENABLE_XR_MODULE
             {
                 KeyButton.onClick.RemoveListener(FireKey);
             }
-#endif // ENABLE_VR && ENABLE_XR_MODULE
         }
 
         /// <summary>

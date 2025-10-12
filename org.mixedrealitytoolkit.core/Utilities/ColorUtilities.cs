@@ -125,20 +125,20 @@ namespace MixedReality.Toolkit
                 for (int i = 0; i < a.colorKeys.Length; i++)
                 {
                     float k = a.colorKeys[i].time;
-#if OPTIMISATION
+#if OPTIMISATION_DICTIONARY
 #else
                     if (!cachedKeyTimes.Contains(k))
-#endif // OPTIMISATION
-                        cachedKeyTimes.Add(k);
+#endif // OPTIMISATION_DICTIONARY
+                    cachedKeyTimes.Add(k);
                 }
 
                 for (int i = 0; i < b.colorKeys.Length; i++)
                 {
                     float k = b.colorKeys[i].time;
-#if OPTIMISATION
+#if OPTIMISATION_DICTIONARY
 #else
                     if (!cachedKeyTimes.Contains(k))
-#endif // OPTIMISATION
+#endif // OPTIMISATION_DICTIONARY
                         cachedKeyTimes.Add(k);
                 }
             }
@@ -148,20 +148,20 @@ namespace MixedReality.Toolkit
                 for (int i = 0; i < a.alphaKeys.Length; i++)
                 {
                     float k = a.alphaKeys[i].time;
-#if OPTIMISATION
+#if OPTIMISATION_DICTIONARY
 #else
                     if (!cachedKeyTimes.Contains(k))
-#endif // OPTIMISATION
+#endif // OPTIMISATION_DICTIONARY
                         cachedKeyTimes.Add(k);
                 }
 
                 for (int i = 0; i < b.alphaKeys.Length; i++)
                 {
                     float k = b.alphaKeys[i].time;
-#if OPTIMISATION
+#if OPTIMISATION_DICTIONARY
 #else
                     if (!cachedKeyTimes.Contains(k))
-#endif // OPTIMISATION
+#endif // OPTIMISATION_DICTIONARY
                         cachedKeyTimes.Add(k);
                 }
             }

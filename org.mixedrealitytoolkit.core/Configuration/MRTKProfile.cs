@@ -66,7 +66,7 @@ namespace MixedReality.Toolkit
         /// </returns>
         public bool TryGetConfigForSubsystem(SystemType subsystemType, out BaseSubsystemConfig config)
         {
-#if OPTIMISATION
+#if OPTIMISATION_DICTIONARY
             if (subsystemConfigs.TryGetValue(subsystemType, out BaseSubsystemConfig subsystemConfig))
             {
                 config = subsystemConfig;
@@ -78,7 +78,7 @@ namespace MixedReality.Toolkit
                 config = subsystemConfigs[subsystemType];
                 return true;
             }
-#endif // OPTIMISATION
+#endif // OPTIMISATION_DICTIONARY
             else
             {
                 config = null;

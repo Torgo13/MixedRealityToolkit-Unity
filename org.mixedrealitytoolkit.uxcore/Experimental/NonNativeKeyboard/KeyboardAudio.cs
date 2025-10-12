@@ -27,7 +27,7 @@ namespace MixedReality.Toolkit.UX
             clickSoundPlayer = gameObject.GetComponent<AudioSource>();
 #if OPTIMISATION_LISTPOOL
             using var _0 = UnityEngine.Pool.ListPool<Button>.Get(out var buttons);
-            GetComponentsInChildren<Button>(true, buttons);
+            GetComponentsInChildren<Button>(includeInactive: true, buttons);
 #else
             var buttons = GetComponentsInChildren<Button>(true);
 #endif // OPTIMISATION_LISTPOOL

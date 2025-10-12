@@ -108,6 +108,7 @@ namespace MixedReality.Toolkit.UX
         /// <summary>
         /// Utility method which can be used to toggle if solvers update.
         /// </summary>
+        [System.Diagnostics.Conditional("ENABLE_VR"), System.Diagnostics.Conditional("ENABLE_XR_MODULE"), System.Diagnostics.Conditional("MRTK_SPATIAL_PRESENT")]
         public void ToggleSolvers()
         {
 #if ENABLE_VR && ENABLE_XR_MODULE
@@ -373,9 +374,9 @@ namespace MixedReality.Toolkit.UX
             return lineInfo.lastCharacterIndex <= prevChar.index;
         }
 
-#if OPTIMISATION
-        readonly WaitForSeconds blinkTime = new WaitForSeconds(0.53f);
-#endif // OPTIMISATION
+#if OPTIMISATION_UNITY
+        static readonly WaitForSeconds blinkTime = new WaitForSeconds(0.53f);
+#endif // OPTIMISATION_UNITY
 
         /// <summary>
         /// Continuously blink the caret game object until it is destroyed.
@@ -387,17 +388,15 @@ namespace MixedReality.Toolkit.UX
 #if OPTIMISATION_UNITY
                 var go = previewCaret.gameObject;
                 go.SetActive(!go.activeSelf);
-#else
-                previewCaret.gameObject.SetActive(!previewCaret.gameObject.activeSelf);
-#endif // OPTIMISATION_UNITY
 
-#if OPTIMISATION
                 yield return blinkTime;
 #else
+                previewCaret.gameObject.SetActive(!previewCaret.gameObject.activeSelf);
+
                 // The default Window's text caret blinks every 530 milliseconds.
                 const float blinkTime = 0.53f;
                 yield return new WaitForSeconds(blinkTime);
-#endif // OPTIMISATION
+#endif // OPTIMISATION_UNITY
             }
         }
 
@@ -405,6 +404,7 @@ namespace MixedReality.Toolkit.UX
         /// If there is a follow solver and a solver handler, update their properties so that the KeyboardPreview transform
         /// moves on top of the system's native's keyboard.
         /// </summary>
+        [System.Diagnostics.Conditional("ENABLE_VR"), System.Diagnostics.Conditional("ENABLE_XR_MODULE"), System.Diagnostics.Conditional("MRTK_SPATIAL_PRESENT")]
         private void ApplyShellSolverParameters()
         {
 #if ENABLE_VR && ENABLE_XR_MODULE

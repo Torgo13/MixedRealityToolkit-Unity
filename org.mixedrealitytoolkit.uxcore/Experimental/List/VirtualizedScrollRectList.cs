@@ -442,7 +442,7 @@ namespace MixedReality.Toolkit.UX.Experimental
         private void InitializePool()
         {
             // Support resetting everything from ResetLayout
-#if OPTIMISATION
+#if OPTIMISATION_DICTIONARY
             foreach (var i in poolDict)
             {
                 MakeInvisible(i.Key);
@@ -452,7 +452,7 @@ namespace MixedReality.Toolkit.UX.Experimental
             {
                 MakeInvisible(i);
             }
-#endif // OPTIMISATION
+#endif // OPTIMISATION_DICTIONARY
 
             poolDict.Clear();
             while (pool.Count > 0)

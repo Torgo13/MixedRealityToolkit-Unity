@@ -178,9 +178,9 @@ namespace MixedReality.Toolkit.Audio
 
         private float nextUpdate = 0f;
 
-#if OPTIMISATION
+#if OPTIMISATION_UNITY
         Transform _cameraTransform;
-#endif // OPTIMISATION
+#endif // OPTIMISATION_UNITY
 
         /// <summary>
         /// A Unity event function that is called when an enabled script instance is being loaded.
@@ -276,19 +276,17 @@ namespace MixedReality.Toolkit.Audio
         /// </summary>
         private void UpdateActiveInfluencerCollection()
         {
-#if OPTIMISATION
+#if OPTIMISATION_UNITY
             if (_cameraTransform == null)
             {
                 var mainCamera = Camera.main;
-                if (mainCamera != null)
-                {
-                    _cameraTransform = mainCamera.transform;
-                    if (_cameraTransform == null)
-                        return;
-                }
+                if (mainCamera == null)
+                    return;
+
+                _cameraTransform = mainCamera.transform;
             }
 
-            var position = gameObject.transform.position;
+            var position = transform.position;
             var cameraPosition = _cameraTransform.position;
 
             // Influencers take effect only when between the emitter and the user.
@@ -306,7 +304,7 @@ namespace MixedReality.Toolkit.Audio
             float distance = Vector3.Distance(cameraTransform.position, gameObject.transform.position);
 
             int count = UnityPhysics.RaycastNonAlloc(cameraTransform.position,
-#endif // OPTIMISATION
+#endif // OPTIMISATION_UNITY
                                                 direction,
                                                 hits,
                                                 distance,
@@ -315,11 +313,12 @@ namespace MixedReality.Toolkit.Audio
 
             for (int i = 0; i < count; i++)
             {
-#if OPTIMISATION
+#if OPTIMISATION_UNITY
                 IAudioInfluencer influencer = hits[i].collider.GetComponentInParent<IAudioInfluencer>();
 #else
                 IAudioInfluencer influencer = hits[i].collider.gameObject.GetComponentInParent<IAudioInfluencer>();
-#endif // OPTIMISATION
+#endif // OPTIMISATION_UNITY
+
                 if (influencer != null)
                 {
                     effectsToApply.Add(influencer);

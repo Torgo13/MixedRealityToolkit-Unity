@@ -247,7 +247,7 @@ namespace MixedReality.Toolkit
         /// </summary>
         private static string TryMigrateReference(string reference)
         {
-#if OPTIMISATION
+#if OPTIMISATION_DICTIONARY
             if (ReferenceMappings.TryGetValue(reference, out string migrateReference))
             {
                 return migrateReference;
@@ -257,7 +257,7 @@ namespace MixedReality.Toolkit
             {
                 return ReferenceMappings[reference];
             }
-#endif // OPTIMISATION
+#endif // OPTIMISATION_DICTIONARY
 
             return reference;
         }

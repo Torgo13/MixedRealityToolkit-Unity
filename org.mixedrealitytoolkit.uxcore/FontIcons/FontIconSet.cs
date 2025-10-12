@@ -86,7 +86,7 @@ namespace MixedReality.Toolkit.UX
         /// <returns>Whether it was able to find the name and remove it.</returns>
         public bool RemoveIcon(string iconName)
         {
-#if OPTIMISATION
+#if OPTIMISATION_DICTIONARY
             return glyphIconsByName.Remove(iconName);
 #else
             if (glyphIconsByName.ContainsKey(iconName))
@@ -98,7 +98,7 @@ namespace MixedReality.Toolkit.UX
             {
                 return false;
             }
-#endif // OPTIMISATION
+#endif // OPTIMISATION_DICTIONARY
         }
 
         /// <summary>
